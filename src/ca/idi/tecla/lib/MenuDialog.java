@@ -17,8 +17,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-public class MenuDialog extends Dialog
-		implements DialogInterface.OnKeyListener{
+public class MenuDialog extends Dialog {
 
 	private Menu mOptionsMenu = null;
 	private MenuItem selectedMenuItem;
@@ -66,19 +65,8 @@ public class MenuDialog extends Dialog
 		super(context);
 		mOptionsMenu = menu;
 		selectedMenuItem = null;
-		setOnKeyListener(this);
 	}
 
-	public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-		if (keyCode == KeyEvent.KEYCODE_BACK ||
-			keyCode == KeyEvent.KEYCODE_DPAD_CENTER ||
-			keyCode == KeyEvent.KEYCODE_ENTER) {
-			dismiss();
-			return true;
-		}
-		return false;
-	}
-	
 	private void setSelectedMenuItem(MenuItem menu_item){
 		selectedMenuItem = menu_item;
 	}

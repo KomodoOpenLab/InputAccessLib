@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 public class InputAccess {
 
@@ -82,10 +83,12 @@ public class InputAccess {
 			menuDialog.setOnCancelListener(new OnCancelListener() {
 
 				public void onCancel(DialogInterface dialog) {
-					activity.onOptionsItemSelected(menuDialog.getSelectedMenuItem());
+					if(menuDialog.getSelectedMenuItem() != null)
+						activity.onOptionsItemSelected(menuDialog.getSelectedMenuItem());
 				}
 			});
 			menuDialog.show();
+			InputAccess.makeAccessible(menuDialog);
 			return false;
 		}
 		else if(menuDialog != null && menuDialog.isShowing()){
