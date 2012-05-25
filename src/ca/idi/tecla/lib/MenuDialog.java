@@ -5,16 +5,13 @@ import java.util.List;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 public class MenuDialog extends Dialog {
@@ -41,14 +38,14 @@ public class MenuDialog extends Dialog {
 		String[] item_title = new String[menuItems.size()];
 		Drawable[] item_icon = new Drawable[menuItems.size()];
 		for(int i=0;i<item_title.length;i++){
-			item_title[i] = (String) menuItems.get(i).getTitle();
-			item_icon[i] = menuItems.get(i).getIcon();
-//			if(item_icon[i] == null){
-//				item_icon[i] = R.drawable.icon;
-//			}
+			MenuItem obj = menuItems.get(i);
+			if(obj.isEnabled() && obj.isVisible()){
+				item_title[i] = (String) obj.getTitle();
+				item_icon[i] = menuItems.get(i).getIcon();
+			}
 		}
-	    //lview.setAdapter(new MenuArrayAdapter(getContext(), items==null?new String[]{}:items, items==null?new int[]{}:imageresource));
-	    lview.setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, item_title));
+	    lview.setAdapter(new MenuArrayAdapter(getContext(), item_title==null?new String[]{}:item_title, item_title==null?new Drawable[]{}:item_icon));
+	    //lview.setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, item_title));
 	    lview.setOnItemClickListener(new OnItemClickListener() {
 
 			public void onItemClick(AdapterView<?> arg0, View view, int position,
