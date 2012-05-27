@@ -21,16 +21,19 @@ public class MenuArrayAdapter extends ArrayAdapter<String> {
 	public MenuArrayAdapter(Context context, String[] objects, Drawable[] imagelist) {
 		super(context, 0, objects);
 		this.context = context;
+		//the strings to be displayed as list items
 		this.values = objects;
+		//the corresponding drawables
 		this.imageResource = imagelist;
 	}
  
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		
+
+		//The layout of each item in the list
+		//defined here like this so that the third party applications can avoid copying an extra layout in their resource folder
 		LinearLayout layout = new LinearLayout(context);
-//		LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
-//		layout.setLayoutParams(params);
 		layout.setPadding(5, 5, 5, 5);
 		layout.setOrientation(LinearLayout.VERTICAL);
 		
@@ -49,6 +52,7 @@ public class MenuArrayAdapter extends ArrayAdapter<String> {
 		textView.setTextAppearance(getContext(), android.R.attr.textAppearanceMedium);
 		layout.addView(textView);
 		
+		//in case there is no image associated with an item
 		if(imageResource[position] == null){
 			imageView.setVisibility(View.GONE);
 			textView.setHeight(textView.getHeight() + 55);

@@ -1,10 +1,6 @@
 package ca.idi.tecla.lib;
 
-import java.util.ArrayList;
-
-
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -12,18 +8,21 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.util.Log;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.WindowManager;
 
 public class InputAccess {
 
+	//The activity whose options menu has to made accessible
 	private Activity activity;
+	//To keep a check on the state of the activity
 	private boolean isActivityRunning = false;
+	//The accessible version of the options menu associated with the activity
 	private MenuDialog menuDialog = null;
+	//To know whether the accessible or the default inaccessible options menu has to be used
 	private boolean accessible = true;
 
+	//A broadcast receiver to receive menu button click events from TeclaIME's navigation keyboard
 	private BroadcastReceiver mReceiver = new BroadcastReceiver() {
 
 	@Override
@@ -34,10 +33,18 @@ public class InputAccess {
 		}
 	};
 
+	/**Set whether the accessible options menu(ideally a dialog) be used or the default inaccessible one.
+	 * @param accessible is the boolean value that when set hides the menu associated with the activity, if visible.
+	 * If set to true then the accessible version of the menu is used otherwise the default inaccessible menu is used, whenever
+	 * a menu has to be displayed.
+	 */
 	public boolean setAccessible(boolean accessible){
 		this.accessible = accessible;
+		//hide the options menu only if this activity is running because only then its options menu will be visible.
 		if(isActivityRunning && !accessible){
 			this.activity.sendBroadcast(new Intent("ca.idi.tekla.ime.action.HIDE_IME_MENU_BUTTON"));
+			//hide any kind of option menu if currently visible
+			//since there is no way to know if the default options menu is currently visible or not
 			if(menuDialog != null && menuDialog.isShowing()){
 				menuDialog.dismiss();
 			}
@@ -55,26 +62,55 @@ public class InputAccess {
 		return false;
 	}
 
+	/**
+	 * Create an object only if you wish to implement the accessible version of the options menu.
+	 * @param activity is the activity whose accessible version of the options menu has to be implemented.
+	 */
 	public InputAccess(Activity activity){
 		this.activity = activity;
+	}
+
+	/**
+	 * Call this method inside the public void onCreate(Bundle) method of your activity.
+	 */
+	public void onCreate(){
 		this.activity.registerReceiver(mReceiver, new IntentFilter("ca.idi.tekla.ime.action.CLICK_IME_MENU_BUTTON"));
 	}
 
+	/**
+	 * Call this method inside the public void onResume() method of your activity
+	 */
 	public void onResume(){
 		isActivityRunning = true;
+		//if accessible ask TeclaIME to show the menu key in its navigation keyboard
 		if(this.accessible)
 			this.activity.sendBroadcast(new Intent("ca.idi.tekla.ime.action.SHOW_IME_MENU_BUTTON"));
 	}
 
+	/**
+	 * Call this method inside the public void onPause() method of your activity
+	 */
 	public void onPause(){
 		isActivityRunning = false;
+		//if pausing ask TeclaIME to hide the menu key in its navigation keyboard
 		this.activity.sendBroadcast(new Intent("ca.idi.tekla.ime.action.HIDE_IME_MENU_BUTTON"));
 	}
 
+	/**
+	 * Call this method inside the public void onDestroy() method of your activity
+	 */
 	public void onDestroy(){
 		this.activity.unregisterReceiver(mReceiver);
 	}
 
+	/**
+	 * Add this method as a return statement to the public boolean onPrepareOptionsMenu(Menu) method of your activity.
+	 * It displays the accessible version of the options menu and returns true if accessibility is set to true(set to true by default)
+	 * or displays the default inaccessible version of the options menu and returns false if accessibility is set to false.
+	 * @param menu is the menu that has to be displayed
+	 * @return false if the accessible version of the menu has been displayed after calling this method and true if
+	 * the default inaccessible version of the options menu has been displayed after calling this method.
+	 */
 	public boolean onPrepareOptionsMenu(Menu menu){
 		if((menuDialog == null || !menuDialog.isShowing()) && accessible){
 			activity.closeOptionsMenu();
@@ -98,6 +134,11 @@ public class InputAccess {
 		return true;
 	}
 
+	/**
+	 * Use this method to know if the accessible version of the options menu is currently being displayed.
+	 * @return true if the accessible version of the options menu is currently being displayed and false if
+	 * the accessible version of the options menu is currently not being displayed.
+	 */
 	public boolean isMenuDialogShowing(){
 		return menuDialog != null && menuDialog.isShowing();
 	}
@@ -118,44 +159,4 @@ public class InputAccess {
 		}
 	}
 
-	/**
-	 * Use the Menu object provided to create an equivalent AlertDialog that can be shown instead of the inaccessible
-	 * menu options layer. 
-	 * @param menu is the inaccessible options menu layer that will be recreated as an AlertDialog
-	 * @param context is the context where the options menu is shown (typically an Activity)
-	 * @return the AlertDialog that should be shown instead of the inaccessible Options Menu
-	 */
-	public static AlertDialog menu2Dialog(Menu menu, Context context) {
-
-		AlertDialog.Builder builder = new AlertDialog.Builder(context);
-		ArrayList<CharSequence> item_titles = new ArrayList<CharSequence>();
-
-		Boolean endReached = false;
-		int i = 0;
-		ArrayList<MenuItem> items = new ArrayList<MenuItem>();
-		while (!endReached) {
-			try {
-				MenuItem item = menu.getItem(i);
-				items.add(item);
-				item_titles.add(item.getTitle());
-				i++;
-			} catch (IndexOutOfBoundsException e) {
-				endReached = true;
-				Log.e("Tecla", "Reached end. Size is: " + i);
-			}
-		}
-
-		final CharSequence[] item_titles_array = new CharSequence[i];
-		for (int j=0;j<i;j++) {
-			item_titles_array[j] = item_titles.get(j);
-		}
-		
-		builder.setItems(item_titles_array, new DialogInterface.OnClickListener() {
-		    public void onClick(DialogInterface dialog, int item) {
-				Log.d("Tecla", "Pressed " + item_titles_array[item]);
-		    }
-		});
-		return builder.create();
-	}
-	
 }
