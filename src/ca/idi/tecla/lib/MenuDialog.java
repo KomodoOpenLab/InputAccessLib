@@ -2,7 +2,6 @@ package ca.idi.tecla.lib;
 
 import java.util.LinkedList;
 import java.util.List;
-
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -66,6 +65,12 @@ public class MenuDialog extends Dialog {
 	    setContentView(lview);
 	}
 	
+	//to close the menu dialog when the menu key is pressed again
+	public boolean onPrepareOptionsMenu(Menu menu){
+		dismiss();
+		return false;
+	}
+
 	public MenuDialog(Context context, Menu menu) {
 		super(context);
 		mOptionsMenu = menu;

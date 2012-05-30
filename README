@@ -1,12 +1,10 @@
-To make your application Tecla Accessible follow the standard procedure:
+To make your application Tecla Accessible follow this procedure:
 
 1. Include the package ca.idi.tecla.lib in your application.
 2. Create an instance of the class InputAccess say inputAccess giving the activity under consideration as a parameter to its constructor.
-3. Call the method inputAccess.onCreate() inside your activity's overriden onCreate(Bundle) method.
-4. Make sure you override the onPause(), onResume() and onDestroy() methods in your activity.
-5. Add the line inputAccess.onPause() to overriden onPause() method, inputAccess.onResume() to the overriden onResume() method and inputAccess.onDestroy() to the overriden onDestroy() method.
-6. Add the return statement inputAccess.onPrepareOptionsMenu(menu) to the method public boolean onPrepareOptionsMenu(Menu menu); in your activity, if you dont have any such method create one.
+3. Make sure you override the onPause() and onResume() methods in your activity.
+4. Add the line inputAccess.onPause() to the overriden onPause() method and inputAccess.onResume() to the overriden onResume() method in your activity.
+5. Add the return statement inputAccess.onPrepareOptionsMenu(menu) to the method public boolean onPrepareOptionsMenu(Menu); in your activity, if you dont have any such method create one.
 
 Note:
-1. You can turn the accessibilty feature on or off by calling setAccessible(boolean) method.(Caution: It will hide the menu if one is currently visible).
-2. You can check if the accessible version of dialog is currently visible by calling inputAccess.isMenuDialogShowing().
+1. Method InputAccess.onPrepareOptionsMenu is overloaded
