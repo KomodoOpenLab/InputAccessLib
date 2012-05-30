@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.provider.Settings;
-import android.util.Log;
 import android.view.Menu;
 import android.view.WindowManager;
 
@@ -62,7 +61,6 @@ public class InputAccess {
 	 * the default inaccessible version of the options menu has been displayed after calling this method.
 	 */
 	public boolean onPrepareOptionsMenu(Menu menu, boolean useAccessibleMenu){
-		Log.e("InputAccess","received a menu button click");
 		if((menuDialog == null || !menuDialog.isShowing()) && (isTeclaIMESelected() || useAccessibleMenu)){
 			activity.closeOptionsMenu();
 			menuDialog = new MenuDialog(this.activity, menu);
