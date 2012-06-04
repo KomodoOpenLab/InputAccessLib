@@ -1,6 +1,5 @@
 package ca.idi.tecla.lib;
 
-import com.microcontrollerbg.irdroid.R;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.view.Gravity;
@@ -38,7 +37,8 @@ public class MenuArrayAdapter extends ArrayAdapter<String> {
 		layout.setOrientation(LinearLayout.VERTICAL);
 		
 		ImageView imageView = new ImageView(context);
-		imageView.setImageDrawable(context.getResources().getDrawable(R.drawable.icon));
+		//FIXME: Where is the 'icon' drawable/resource?
+		//imageView.setImageDrawable(context.getResources().getDrawable(R.drawable.icon));
 		LayoutParams image_params = new LayoutParams(50, 50, Gravity.CENTER);
 		image_params.setMargins(0, 5, 0, 0);
 		image_params.gravity = Gravity.CENTER;
