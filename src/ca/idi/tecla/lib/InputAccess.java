@@ -18,15 +18,6 @@ public class InputAccess {
 	private static final String TECLA_IME_ID = "ca.idi.tekla/.ime.TeclaIME";
 
 	/**
-	 * Checks if Tecla IME is the selected as the current input method or not.
-	 * @return true if Tecla IME is the current input method, false otherwise.
-	 */
-	private boolean isTeclaIMESelected(){
-		String id = Settings.Secure.getString(this.activity.getContentResolver(), Settings.Secure.DEFAULT_INPUT_METHOD);
-		return id != null && id.equals(TECLA_IME_ID);
-	}
-	
-	/**
 	 * Create an object only if you wish to implement the accessible version of the options menu.
 	 * @param activity is the activity whose accessible version of the options menu has to be implemented.
 	 */
@@ -94,6 +85,15 @@ public class InputAccess {
 		return this.onPrepareOptionsMenu(menu, true);
 	}
 
+	/**
+	 * Checks if Tecla IME is the selected as the current input method or not.
+	 * @return true if Tecla IME is the current input method, false otherwise.
+	 */
+	private boolean isTeclaIMESelected(){
+		String id = Settings.Secure.getString(this.activity.getContentResolver(), Settings.Secure.DEFAULT_INPUT_METHOD);
+		return id != null && id.equals(TECLA_IME_ID);
+	}
+	
 	/**
 	 * Arrange the z-order of a Dialog or AlertDialog so that it becomes accessible to any input method (e.g.,
 	 * soft-keyboard, remote control, hands-free kit or external device driver) installed on the user's device.
