@@ -39,7 +39,6 @@ public class MenuDialog extends Dialog {
 			}
 			index++;
 		}
-		setTitle("Menu");
 		String[] item_title = new String[menuItems.size()];
 		Drawable[] item_icon = new Drawable[menuItems.size()];
 		for(int i=0;i<item_title.length;i++){
