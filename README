@@ -1,10 +1,18 @@
 To make your application Tecla Accessible follow this procedure:
 
 1. Include the package ca.idi.tecla.lib in your application.
-2. Create an instance of the class InputAccess say inputAccess giving the activity under consideration as a parameter to its constructor.
-3. Make sure you override the onPause() and onResume() methods in your activity.
+2. Create an instance of the class InputAccess( say inputAccess) giving the activity whose options menu has to be made accessible as a parameter to the constructor.
+3. Override the onPause() and onResume() methods of the activity.
 4. Add the line inputAccess.onPause() to the overriden onPause() method and inputAccess.onResume() to the overriden onResume() method in your activity.
-5. Add the return statement inputAccess.onPrepareOptionsMenu(menu) to the method public boolean onPrepareOptionsMenu(Menu); in your activity, if you dont have any such method create one.
+5. Add the return statement inputAccess.onPrepareOptionsMenu(menu) to the method public boolean onPrepareOptionsMenu(Menu) defined in your activity. If you dont have any such method defined, define it.
 
 Note:
-1. Method InputAccess.onPrepareOptionsMenu is overloaded
+1. Method InputAccess.onPrepareOptionsMenu() is overloaded
+
+Demo programs:
+
+Inaccessible version:
+https://github.com/rishabhjain08/demo-inputaccesslib/tree/master/DemoInaccessibleOptionsMenu
+
+Accessible version:
+https://github.com/rishabhjain08/demo-inputaccesslib/tree/master/DemoAccessibleOptionsMenu

@@ -31,14 +31,13 @@ public class MenuArrayAdapter extends ArrayAdapter<String> {
 		
 
 		//The layout of each item in the list
-		//defined here like this so that the third party applications can avoid copying an extra layout in their resource folder
+		//defined here dynamically so that the third party applications 
+		//can avoid copying an extra layout in their resource folder
 		LinearLayout layout = new LinearLayout(context);
 		layout.setPadding(5, 5, 5, 5);
 		layout.setOrientation(LinearLayout.VERTICAL);
 		
 		ImageView imageView = new ImageView(context);
-		//FIXME: Where is the 'icon' drawable/resource?
-		//imageView.setImageDrawable(context.getResources().getDrawable(R.drawable.icon));
 		LayoutParams image_params = new LayoutParams(50, 50, Gravity.CENTER);
 		image_params.setMargins(0, 5, 0, 0);
 		image_params.gravity = Gravity.CENTER;
