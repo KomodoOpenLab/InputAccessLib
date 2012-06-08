@@ -16,6 +16,8 @@ public class MenuArrayAdapter extends ArrayAdapter<String> {
 	private Context context;
 	private String[] values;
 	private Drawable[] imageResource;
+	//set to true of no menu item has an icon associated with it
+	private boolean noDrawableSet;
 	
 	public MenuArrayAdapter(Context context, String[] objects, Drawable[] imagelist) {
 		super(context, 0, objects);
@@ -24,6 +26,17 @@ public class MenuArrayAdapter extends ArrayAdapter<String> {
 		this.values = objects;
 		//the corresponding drawables
 		this.imageResource = imagelist;
+		
+		noDrawableSet = true;
+		if(imageResource != null){
+			for(int i=0;i<imageResource.length;i++){
+				if(imageResource[i] != null){
+					noDrawableSet = false;
+					break;
+				}
+			}
+		}
+	
 	}
  
 	@Override
@@ -35,29 +48,30 @@ public class MenuArrayAdapter extends ArrayAdapter<String> {
 		//can avoid copying an extra layout in their resource folder
 		LinearLayout layout = new LinearLayout(context);
 		layout.setPadding(5, 5, 5, 5);
-		layout.setOrientation(LinearLayout.VERTICAL);
+		layout.setOrientation(LinearLayout.HORIZONTAL);
 		
 		ImageView imageView = new ImageView(context);
-		LayoutParams image_params = new LayoutParams(50, 50, Gravity.CENTER);
-		image_params.setMargins(0, 5, 0, 0);
-		image_params.gravity = Gravity.CENTER;
+		LayoutParams image_params = new LayoutParams(50, 50);
+		image_params.setMargins(5, 5, 20, 0);
+		image_params.gravity = Gravity.CENTER_VERTICAL;
 		imageView.setLayoutParams(image_params);
 		layout.addView(imageView);
 		
 		TextView textView = new TextView(context);
-		textView.setLines(1);
-		textView.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, android.view.ViewGroup.LayoutParams.FILL_PARENT));
-		textView.setGravity(Gravity.CENTER);
+		LayoutParams layoutParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+		layoutParams.gravity = Gravity.CENTER;
+		textView.setLayoutParams(layoutParams);
 		textView.setTextAppearance(getContext(), android.R.attr.textAppearanceMedium);
 		layout.addView(textView);
 		
-		//in case there is no image associated with an item
-		if(imageResource[position] == null){
-			imageView.setVisibility(View.GONE);
-			textView.setHeight(textView.getHeight() + 55);
-		}
 		textView.setText(values[position]);
 		imageView.setImageDrawable(imageResource[position]);
+
+		//in case no item in the list has an icon associated with it
+		if(noDrawableSet){
+			imageView.setVisibility(View.GONE);
+		}
+
 		return layout;
 	}
 }
