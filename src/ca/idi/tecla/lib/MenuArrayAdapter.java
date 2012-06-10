@@ -10,6 +10,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
  
 public class MenuArrayAdapter extends ArrayAdapter<String> {
@@ -46,9 +47,11 @@ public class MenuArrayAdapter extends ArrayAdapter<String> {
 		//The layout of each item in the list
 		//defined here dynamically so that the third party applications 
 		//can avoid copying an extra layout in their resource folder
+
+		RelativeLayout container = new RelativeLayout(context);
+
 		LinearLayout layout = new LinearLayout(context);
-		//FIXME: This line is generating ClassCastException at runtime
-		layout.setLayoutParams(new FrameLayout.LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT));
+		layout.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT));
 		layout.setPadding(5, 5, 5, 5);
 		layout.setOrientation(LinearLayout.HORIZONTAL);
 
@@ -58,7 +61,7 @@ public class MenuArrayAdapter extends ArrayAdapter<String> {
 		image_params.gravity = Gravity.CENTER_VERTICAL;
 		imageView.setLayoutParams(image_params);
 		layout.addView(imageView);
-		
+
 		TextView textView = new TextView(context);
 		LayoutParams layoutParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 		layoutParams.gravity = Gravity.CENTER;
@@ -74,6 +77,7 @@ public class MenuArrayAdapter extends ArrayAdapter<String> {
 			imageView.setVisibility(View.GONE);
 		}
 
-		return layout;
+		container.addView(layout);
+		return container;
 	}
 }
