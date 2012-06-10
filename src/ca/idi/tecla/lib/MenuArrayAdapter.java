@@ -6,6 +6,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
@@ -41,15 +42,16 @@ public class MenuArrayAdapter extends ArrayAdapter<String> {
  
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		
 
 		//The layout of each item in the list
 		//defined here dynamically so that the third party applications 
 		//can avoid copying an extra layout in their resource folder
 		LinearLayout layout = new LinearLayout(context);
+		//FIXME: This line is generating ClassCastException at runtime
+		layout.setLayoutParams(new FrameLayout.LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT));
 		layout.setPadding(5, 5, 5, 5);
 		layout.setOrientation(LinearLayout.HORIZONTAL);
-		
+
 		ImageView imageView = new ImageView(context);
 		LayoutParams image_params = new LayoutParams(50, 50);
 		image_params.setMargins(5, 5, 20, 0);
