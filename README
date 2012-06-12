@@ -4,12 +4,10 @@ To make your application Tecla Accessible follow this procedure:
 2. Create an instance of the class InputAccess(say inputAccess) giving the activity whose options menu has to be made accessible as a parameter to the constructor.
 
 A. To make the options menu accessible
-1. Override the onPause() and onResume() methods of the activity.
-2. Add the line inputAccess.onPause() to the overriden onPause() method and inputAccess.onResume() to the overriden onResume() method in your activity.
-3. Add the return statement inputAccess.onPrepareOptionsMenu(menu) to the method public boolean onPrepareOptionsMenu(Menu) defined in your activity. If you dont have any such method defined, define it.
+1. Call the method inputAccess.onCreate() inside the activity's onCreate(Bundle) method.
 
 Note:
-1. Method InputAccess.onPrepareOptionsMenu() is overloaded
+1. The constructor is overloaded.
 
 B. To make android.widget.Spinner accessible
 1. Change the <Spinner></Spinner> tag in your xml layout file to the fully qualified custom Spinner class name. For eg., if the location of the custom Spinner class inside your src folder is /ca/idi/tecla/lib/Spinner.java than you should replace <Spinner> tags with <ca.idi.tecla.lib.Spinner>
