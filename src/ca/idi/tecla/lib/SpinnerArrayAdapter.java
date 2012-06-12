@@ -19,7 +19,7 @@ public class SpinnerArrayAdapter extends ArrayAdapter<Integer>{
 	
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent){
-		View v = spinnerAdapter.getDropDownView(position, null, parent);
+		View v = spinnerAdapter.getDropDownView(position, convertView, parent);
 		return v;
 	}
 
