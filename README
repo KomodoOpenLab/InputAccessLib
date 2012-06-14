@@ -13,10 +13,4 @@ B. To make android.widget.Spinner accessible
 1. Change the <Spinner></Spinner> tag in your xml layout file to the fully qualified custom Spinner class name. For eg., if the location of the custom Spinner class inside your src folder is /ca/idi/tecla/lib/Spinner.java than you should replace <Spinner> tags with <ca.idi.tecla.lib.Spinner>
 2. Import the custom Spinner class instead of importing android.widget.Spinner in your code.
 
-Demo programs:
-
-Inaccessible version:
-https://github.com/rishabhjain08/demo-inputaccesslib/tree/master/DemoInaccessibleOptionsMenu
-
-Accessible version:
-https://github.com/rishabhjain08/demo-inputaccesslib/tree/master/DemoAccessibleOptionsMenu
+Demo programs available at https://github.com/idrc/InputAccessLib/tree/devel/examples
