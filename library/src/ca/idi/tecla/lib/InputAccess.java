@@ -117,7 +117,7 @@ public class InputAccess {
 			}
 
 			public boolean onPreparePanel(int featureId, View view, Menu menu) {
-				return onPrepareOptionsMenu(menu, isDefaultMenu);
+				return cb.onPreparePanel(featureId, view, menu);
 			}
 
 			public void onPanelClosed(int featureId, Menu menu) {
@@ -125,7 +125,7 @@ public class InputAccess {
 			}
 
 			public boolean onMenuOpened(int featureId, Menu menu) {
-				return cb.onMenuOpened(featureId, menu);
+				return onPrepareOptionsMenu(menu, isDefaultMenu);
 			}
 
 			public boolean onMenuItemSelected(int featureId, MenuItem item) {
