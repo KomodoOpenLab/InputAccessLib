@@ -65,7 +65,7 @@ public class InputAccess {
 
 				public void onCancel(DialogInterface dialog) {
 					if(menuDialog.getSelectedMenuItem() != null)
-						activity.onOptionsItemSelected(menuDialog.getSelectedMenuItem());
+						activity.getWindow().getCallback().onMenuItemSelected(0, menuDialog.getSelectedMenuItem());
 				}
 			});
 			menuDialog.show();
