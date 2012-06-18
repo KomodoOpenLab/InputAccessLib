@@ -65,11 +65,11 @@ public class InputAccess {
 
 				public void onCancel(DialogInterface dialog) {
 					if(menuDialog.getSelectedMenuItem() != null)
-						activity.onOptionsItemSelected(menuDialog.getSelectedMenuItem());
+						activity.getWindow().getCallback().onMenuItemSelected(0, menuDialog.getSelectedMenuItem());
 				}
 			});
 			menuDialog.show();
-			InputAccess.makeAccessible(menuDialog);
+			InputAccess.showBelowIME(menuDialog);
 			return false;
 		}
 		else if(menuDialog != null && menuDialog.isShowing()){
@@ -117,7 +117,7 @@ public class InputAccess {
 			}
 
 			public boolean onPreparePanel(int featureId, View view, Menu menu) {
-				return onPrepareOptionsMenu(menu, isDefaultMenu);
+				return cb.onPreparePanel(featureId, view, menu);
 			}
 
 			public void onPanelClosed(int featureId, Menu menu) {
@@ -125,7 +125,7 @@ public class InputAccess {
 			}
 
 			public boolean onMenuOpened(int featureId, Menu menu) {
-				return cb.onMenuOpened(featureId, menu);
+				return onPrepareOptionsMenu(menu, isDefaultMenu);
 			}
 
 			public boolean onMenuItemSelected(int featureId, MenuItem item) {
@@ -177,7 +177,7 @@ public class InputAccess {
 	 * the show() method).
 	 * @param dialog is the Dialog or AlertDialog whose z-order need to be fixed.
 	 */
-	public static void makeAccessible(Dialog dialog) {
+	public static void showBelowIME(Dialog dialog) {
 		if (dialog.isShowing()) {
 			// Window gets key input focus
 			dialog.getWindow().setFlags(0, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
