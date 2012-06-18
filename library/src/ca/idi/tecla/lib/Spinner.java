@@ -39,7 +39,7 @@ public class Spinner extends android.widget.Spinner{
 
 		AlertDialog dialog = builder.create();
 		dialog.show();
-		InputAccess.makeAccessible(dialog);
+		InputAccess.showBelowIME(dialog);
 
 		//In case drop down view resource is simple_spinner_dropdown_item or simple_list_item_checked then
 		//the selected item should be shown checked
