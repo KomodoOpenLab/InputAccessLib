@@ -69,7 +69,7 @@ public class InputAccess {
 				}
 			});
 			menuDialog.show();
-			InputAccess.makeAccessible(menuDialog);
+			InputAccess.showBelowIME(menuDialog);
 			return false;
 		}
 		else if(menuDialog != null && menuDialog.isShowing()){
@@ -177,7 +177,7 @@ public class InputAccess {
 	 * the show() method).
 	 * @param dialog is the Dialog or AlertDialog whose z-order need to be fixed.
 	 */
-	public static void makeAccessible(Dialog dialog) {
+	public static void showBelowIME(Dialog dialog) {
 		if (dialog.isShowing()) {
 			// Window gets key input focus
 			dialog.getWindow().setFlags(0, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
