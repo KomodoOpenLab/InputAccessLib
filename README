@@ -3,14 +3,21 @@ To make your application Tecla Accessible follow this procedure:
 1. Include the package ca.idi.tecla.lib in your application.
 2. Create an instance of the class InputAccess(say inputAccess) giving the activity whose options menu has to be made accessible as a parameter to the constructor.
 
-A. To make the options menu accessible
+A. To make a Dialog accessible
+1. Call the method showBelowIME(Dialog) and pass it the dialog to be made accessible as a parameter.
+
+B. To make the options menu accessible
 1. Call the method inputAccess.onCreate() inside the activity's onCreate(Bundle) method.
 
 Note:
 1. The constructor is overloaded.
 
-B. To make android.widget.Spinner accessible
+C. To make android.widget.Spinner accessible
 1. Change the <Spinner></Spinner> tag in your xml layout file to the fully qualified custom Spinner class name. For eg., if the location of the custom Spinner class inside your src folder is /ca/idi/tecla/lib/Spinner.java than you should replace <Spinner> tags with <ca.idi.tecla.lib.Spinner>
 2. Import the custom Spinner class instead of importing android.widget.Spinner in your code.
+
+D. To make android.preference.ListPreference accessible
+1. Change the <ListPreference></ListPreference> tag in your xml layout file to the fully qualified custom ListPreference class name. For eg., if the location of the custom ListPreference class inside your src folder is /ca/idi/tecla/lib/ListPreference.java than you should replace <ListPreference> tags with <ca.idi.tecla.lib.ListPreference>
+2. Import the custom ListPreference class instead of importing android.preference.ListPreference in your code.
 
 Demo programs available at https://github.com/idrc/InputAccessLib/tree/devel/examples
