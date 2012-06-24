@@ -34,7 +34,7 @@ public class AlertDialogActivity extends Activity {
 				AlertDialog dialog = builder.create();
 				dialog.show();
 				//make this static call after '.show()' has been called on a dialog to make ot accessible
-				InputAccess.showBelowIME(dialog);
+				InputAccess.makeAccessible(dialog);
 			}
 		});
     }

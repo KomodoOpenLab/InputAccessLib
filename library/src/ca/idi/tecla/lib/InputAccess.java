@@ -1,13 +1,11 @@
 package ca.idi.tecla.lib;
 
-import java.lang.reflect.Method;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.provider.Settings;
-import android.view.ActionMode;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,50 +26,6 @@ public class InputAccess {
 	//the currently selected keyboard
 	private boolean isDefaultMenu;
 	private static final String TECLA_IME_ID = "ca.idi.tekla/.ime.TeclaIME";
-
-	private static Method dispatchGenericMotionEvent;
-	private static Method dispatchKeyShortcutEvent;
-	private static Method onActionModeFinished;
-	private static Method onActionModeStarted;
-	private static Method onWindowStartingActionMode;
-
-	static{
-		 try {
-             Class<?> partypes[] = new Class[1];
-             partypes[0] = MotionEvent.class;
-             dispatchGenericMotionEvent = Callback.class.getMethod("dispatchGenericMotionEvent", partypes);
-		 } catch (NoSuchMethodException e) {
-		 }
-
-		 try {
-             Class<?> partypes[] = new Class[1];
-             partypes[0] = KeyEvent.class;
-             dispatchKeyShortcutEvent = Callback.class.getMethod("dispatchKeyShortcutEvent", partypes);
-		 } catch (NoSuchMethodException e) {
-		 }
-
-		 try {
-             Class<?> partypes[] = new Class[1];
-             partypes[0] = ActionMode.class;
-             onActionModeFinished = Callback.class.getMethod("onActionModeFinished", partypes);
-		 } catch (NoSuchMethodException e) {
-		 }
-
-		 try {
-             Class<?> partypes[] = new Class[1];
-             partypes[0] = ActionMode.class;
-             onActionModeStarted = Callback.class.getMethod("onActionModeStarted", partypes);
-		 } catch (NoSuchMethodException e) {
-		 }
-
-		 try {
-             Class<?> partypes[] = new Class[1];
-             partypes[0] = android.view.ActionMode.Callback.class;
-             onWindowStartingActionMode = Callback.class.getMethod("onWindowStartingActionMode", partypes);
-		 } catch (NoSuchMethodException e) {
-		 }
-
-}
 
 	/**
 	 * Create an object only if you wish to implement the accessible version of the options menu.
@@ -212,55 +166,6 @@ public class InputAccess {
 
 			public boolean dispatchKeyEvent(KeyEvent event) {
 				return cb.dispatchKeyEvent(event);
-			}
-
-			public boolean dispatchGenericMotionEvent(MotionEvent event) {
-				if(dispatchGenericMotionEvent !=null){
-					try {
-						return (Boolean) dispatchGenericMotionEvent.invoke(cb, event);
-					} catch (Exception e) {
-					}
-				}
-				return false;
-			}
-
-			public boolean dispatchKeyShortcutEvent(KeyEvent event) {
-				if(dispatchKeyShortcutEvent != null){
-					try {
-						return (Boolean) dispatchKeyShortcutEvent.invoke(cb, event);
-					} catch (Exception e) {
-					}
-				}
-				return false;
-			}
-
-			public void onActionModeFinished(ActionMode mode) {
-				if(onActionModeFinished != null){
-					try {
-						onActionModeFinished.invoke(cb, mode);
-					} catch (Exception e) {
-					}
-				}
-			}
-
-			public void onActionModeStarted(ActionMode mode) {
-				if(onActionModeStarted != null){
-					try {
-						onActionModeStarted.invoke(cb, mode);
-					} catch (Exception e) {
-					}
-				}
-			}
-
-			public ActionMode onWindowStartingActionMode(
-					android.view.ActionMode.Callback callback) {
-				if(onWindowStartingActionMode != null){
-					try {
-						return (ActionMode) onWindowStartingActionMode.invoke(cb, callback);
-					} catch (Exception e) {
-					}
-				}
-				return null;
 			}
 		});
 	}
