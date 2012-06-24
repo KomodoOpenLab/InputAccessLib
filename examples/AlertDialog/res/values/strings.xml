@@ -2,7 +2,7 @@
 <resources>
 
     <string name="hello">Click this button to create and display an accessible AlertDialog</string>
-    <string name="app_name">AlertDialog</string>
+    <string name="app_name">Accessible AlertDialog</string>
     <string name="positive_button_label">OK</string>
 	<string name="show_alert_dialog">Show AlertDialog</string>
 	<string name="message">This is a demo program to illustrate that how InputAccessLib can be used to make a dialog accessible. If an input method is currently visible notice that it is still accessible.</string>
