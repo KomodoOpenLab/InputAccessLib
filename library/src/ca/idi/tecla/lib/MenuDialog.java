@@ -2,6 +2,8 @@ package ca.idi.tecla.lib;
 
 import java.util.LinkedList;
 import java.util.List;
+
+import ca.idi.tecla.view.R;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
