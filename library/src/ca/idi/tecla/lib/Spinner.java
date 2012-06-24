@@ -35,20 +35,12 @@ public class Spinner extends android.widget.Spinner{
 		for(i=0;i<getAdapter().getCount();i++){
 			item_count.add(i);
 		}
-
 		//Creating a new custom array adapter to take drop down view resource into account
 		SpinnerArrayAdapter customAdapter = new SpinnerArrayAdapter(getContext(), 0, item_count, getAdapter());
-		builder.setAdapter(customAdapter, this);
 
-		AlertDialog dialog = builder.create();
+		AlertDialog dialog = builder.setSingleChoiceItems(customAdapter, getSelectedItemPosition(), this).create();
 		dialog.show();
 		InputAccess.showBelowIME(dialog);
-
-		//In case drop down view resource is simple_spinner_dropdown_item or simple_list_item_checked then
-		//the selected item should be shown checked
-		ListView listView = dialog.getListView();
-		listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-		listView.setItemChecked(getSelectedItemPosition(), true);
 		return true;
 	}
 	
