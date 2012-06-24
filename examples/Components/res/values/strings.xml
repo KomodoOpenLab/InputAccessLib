@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="hello">Hello World, AccessibleComponents!</string>
+    <string name="app_name">Accessible Components</string>
+    <string-array name="accessible_component_list">
+        <item>Accessible AlertDialog</item>
+        <item>Accessible ListPreference</item>
+        <item>Accessible Options Menu</item>
+        <item>Accessible Spinner</item>
+    </string-array>
+
+	<string name="spinner_hello">Open the Spinner and observe that the dialog is accessible</string>
+    <string name="spinner_activity_name">Accessible Spinner</string>
+    <string name="spinner_title">Select an item</string>
+    <string-array name="spinner_list_items">
+		<item>Item 1</item>
+		<item>Item 2</item>
+		<item>Item 3</item>
+		<item>Item 4</item>
+		<item>Item 5</item>
+	</string-array>
+
+	<string name="options_menu_hello">Open the menu and observe the accessible options menu implemented as an AlertDialog</string>
+    <string name="options_menu_activity_name">Accessible OptionsMenu</string>
+    <string-array name="options_menu_items">
+		<item>Item 1</item>
+		<item>Item 2</item>
+		<item>Item 3</item>
+		<item>Item 4</item>
+		<item>Item 5</item>
+	</string-array>
+    
+    <string name="list_preference_hello">Hello World, ListPreferenceActivity!</string>
+    <string name="list_preference_activity_name">Accessible ListPreference</string>
+	<string name="list_preference_title">Configure device</string>
+	<string-array name="list_preference_list_items_values">
+	    <item>0</item>
+	    <item>1</item>
+   	    <item>2</item>
+   	    <item>3</item>
+   	</string-array>
+	<string-array name="list_preference_list_items">
+	    <item>Laptop</item>
+	    <item>Tablet</item>
+   	    <item>Ultrabook</item>
+   	    <item>Desktop computer</item>
+   	</string-array>
+
+    <string name="alert_dialog_hello">Click this button to create and display an accessible AlertDialog</string>
+    <string name="alert_dialog_activity_name">Accessible AlertDialog</string>
+    <string name="alert_dialog_positive_button_label">OK</string>
+	<string name="alert_dialog_show">Show AlertDialog</string>
+	<string name="alert_dialog_message">This is a demo program to illustrate that how InputAccessLib can be used to make a dialog accessible. If an input method is currently visible notice that it is still accessible.</string>
+	
+	<!--  InAccessible -->
+    
+    <string name="inaccessible_app_name">Standard Components</string>
+	
+    <string-array name="inaccessible_component_list">
+        <item>Standard AlertDialog</item>
+        <item>Standard ListPreference</item>
+        <item>Standard Options Menu</item>
+        <item>Standard Spinner</item>
+    </string-array>
+    
+	<string name="inaccessible_alert_dialog_activity_name">Standard AlertDialog</string>
+    <string name="inaccessible_list_preference_activity_name">Standard ListPreference</string>
+    <string name="inaccessible_options_menu_activity_name">Standard OptionsMenu</string>
+    <string name="inaccessible_spinner_activity_name">Standard Spinner</string>
+    
+	<string name="inaccessible_alert_dialog_hello">Click this button to create and display an inaccessible AlertDialog</string>
+	<string name="inaccessible_alert_dialog_message">This is a demo program to illustrate the inaccessibility of dialogs</string>
+	<string name="inaccessible_options_menu_hello">Open the menu and observe that altough the menu seems to be on the top of the activity but the window in focus is still the activity\'s window</string>
+	<string name="inaccessible_spinner_hello">Open the Spinner and observe that the dialog is inaccessible</string>
+</resources>

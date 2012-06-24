@@ -1,0 +1,34 @@
+package com.demo.accessible;
+
+import android.app.ListActivity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+
+public class AccessibleComponents extends ListActivity {
+    /** Called when the activity is first created. */
+	@SuppressWarnings("rawtypes")
+	private static final Class[] classes = {
+		AlertDialogActivity.class,
+		ListPreferenceActivity.class,
+		OptionsMenuActivity.class,
+		SpinnerActivity.class};
+    
+	@Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        //setContentView(R.layout.main);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.accessible_component_list));
+        setListAdapter(adapter);
+    }
+    
+    @Override
+	protected void onListItemClick(ListView l, View v, int position, long id) {
+    	Intent intent = new Intent();
+    	intent.setClass(getApplicationContext(), classes[position]);
+    	startActivity(intent);
+    }
+    
+}
