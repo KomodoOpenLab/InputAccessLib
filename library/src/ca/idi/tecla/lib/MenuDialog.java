@@ -16,6 +16,7 @@ import android.widget.ListView;
 
 public class MenuDialog extends Dialog {
 
+	private Context mContext;
 	//the options menu to convert
 	private Menu mOptionsMenu = null;
 	//the selected item in the list
@@ -49,7 +50,7 @@ public class MenuDialog extends Dialog {
 				item_icon[i] = menuItems.get(i).getIcon();
 			}
 		}
-	    lview.setAdapter(new MenuArrayAdapter(getContext(), item_title==null?new String[]{}:item_title, item_title==null?new Drawable[]{}:item_icon));
+	    lview.setAdapter(new MenuArrayAdapter(mContext, item_title==null?new String[]{}:item_title, item_title==null?new Drawable[]{}:item_icon));
 	    lview.setOnItemClickListener(new OnItemClickListener() {
 
 			public void onItemClick(AdapterView<?> arg0, View view, int position,
@@ -73,6 +74,7 @@ public class MenuDialog extends Dialog {
 
 	public MenuDialog(Context context, Menu menu) {
 		super(context);
+		mContext = context;
 		mOptionsMenu = menu;
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 	}
