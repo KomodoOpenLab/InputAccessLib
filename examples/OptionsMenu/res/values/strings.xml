@@ -2,7 +2,7 @@
 <resources>
 
     <string name="hello">Open the menu and observe the accessible options menu implemented as an AlertDialog</string>
-    <string name="app_name">OptionsMenu</string>
+    <string name="app_name">Accessible OptionsMenu</string>
     <string-array name="menu_items">
 		<item>Item 1</item>
 		<item>Item 2</item>

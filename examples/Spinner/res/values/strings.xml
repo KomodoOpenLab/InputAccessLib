@@ -2,7 +2,7 @@
 <resources>
 
     <string name="hello">Open the Spinner and observe that the dialog is accessible</string>
-    <string name="app_name">Spinner</string>
+    <string name="app_name">Accessible Spinner</string>
     <string name="title">Select an item</string>
     <string-array name="list_items">
 		<item>Item 1</item>
