@@ -12,7 +12,7 @@
         
         <activity
             android:name=".AccessibleComponents"
-            android:label="@string/app_name" >
+            android:label="@string/accessible_app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

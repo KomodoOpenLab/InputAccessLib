@@ -2,7 +2,8 @@
 <resources>
 
     <string name="hello">Hello World, AccessibleComponents!</string>
-    <string name="app_name">Accessible Components</string>
+    <string name="app_name">InputAccessLib Demo</string>
+    <string name="accessible_app_name">Demo Accessible</string>
     <string-array name="accessible_component_list">
         <item>Accessible AlertDialog</item>
         <item>Accessible ListPreference</item>
@@ -55,7 +56,7 @@
 	
 	<!--  InAccessible -->
     
-    <string name="inaccessible_app_name">Standard Components</string>
+    <string name="inaccessible_app_name">Demo Standard</string>
 	
     <string-array name="inaccessible_component_list">
         <item>Standard AlertDialog</item>
