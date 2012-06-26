@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.view.Window.Callback;
 import android.view.WindowManager.LayoutParams;
@@ -111,7 +112,7 @@ public class InputAccess {
 
 				public void onCancel(DialogInterface dialog) {
 					if(menuDialog.getSelectedMenuItem() != null)
-						activity.getWindow().getCallback().onMenuItemSelected(0, menuDialog.getSelectedMenuItem());
+						activity.getWindow().getCallback().onMenuItemSelected(Window.FEATURE_OPTIONS_PANEL, menuDialog.getSelectedMenuItem());
 				}
 			});
 			menuDialog.show();
