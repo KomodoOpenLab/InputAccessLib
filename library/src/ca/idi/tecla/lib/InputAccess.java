@@ -172,7 +172,12 @@ public class InputAccess {
 			}
 
 			public boolean onMenuOpened(int featureId, Menu menu) {
-				return onPrepareOptionsMenu(menu, isDefaultMenu);
+				if(featureId == Window.FEATURE_OPTIONS_PANEL){
+					return onPrepareOptionsMenu(menu, isDefaultMenu);
+				}
+				else{
+					return cb.onMenuOpened(featureId, menu);
+				}
 			}
 
 			public boolean onMenuItemSelected(int featureId, MenuItem item) {
