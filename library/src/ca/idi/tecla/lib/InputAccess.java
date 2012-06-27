@@ -164,7 +164,11 @@ public class InputAccess {
 			}
 
 			public boolean onPreparePanel(int featureId, View view, Menu menu) {
-				return cb.onPreparePanel(featureId, view, menu);
+				boolean b = cb.onPreparePanel(featureId, view, menu);
+				if(b && featureId == Window.FEATURE_OPTIONS_PANEL){
+					return onPrepareOptionsMenu(menu, isDefaultMenu);
+				}
+				return b;
 			}
 
 			public void onPanelClosed(int featureId, Menu menu) {
@@ -172,12 +176,7 @@ public class InputAccess {
 			}
 
 			public boolean onMenuOpened(int featureId, Menu menu) {
-				if(featureId == Window.FEATURE_OPTIONS_PANEL){
-					return onPrepareOptionsMenu(menu, isDefaultMenu);
-				}
-				else{
-					return cb.onMenuOpened(featureId, menu);
-				}
+				return cb.onMenuOpened(featureId, menu);
 			}
 
 			public boolean onMenuItemSelected(int featureId, MenuItem item) {
