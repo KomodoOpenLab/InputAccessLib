@@ -81,6 +81,7 @@ public class MenuDialog extends Dialog {
 	//to close the menu dialog when the menu key is pressed again
 	public boolean onPrepareOptionsMenu(Menu menu){
 		dismiss();
+		((Activity)mContext).getWindow().getCallback().onPanelClosed(Window.FEATURE_OPTIONS_PANEL, mOptionsMenu);
 		return false;
 	}
 
