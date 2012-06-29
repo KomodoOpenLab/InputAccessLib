@@ -8,6 +8,7 @@ A. To make a Dialog accessible
 
 B. To make the options menu accessible
 1. Call the method inputAccess.onCreate() inside the activity's onCreate(Bundle) method.
+2. Replace all occurrences of closeOptionsMenu() with inputAccess.closeOptionsMenu()
 
 Note:
 1. The constructor is overloaded.
