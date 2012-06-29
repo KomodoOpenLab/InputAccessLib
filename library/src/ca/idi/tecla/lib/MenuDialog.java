@@ -81,7 +81,6 @@ public class MenuDialog extends Dialog {
 	//to close the menu dialog when the menu key is pressed again
 	public boolean onPrepareOptionsMenu(Menu menu){
 		dismiss();
-		((Activity)mContext).getWindow().getCallback().onPanelClosed(Window.FEATURE_OPTIONS_PANEL, mOptionsMenu);
 		return false;
 	}
 
@@ -99,7 +98,15 @@ public class MenuDialog extends Dialog {
 	public MenuItem getSelectedMenuItem(){
 		return selectedMenuItem;
 	}
-	
+
+	/**
+	 * Get the menu associated with this dialog
+	 * @return the menu shown by this dialog
+	 */
+	public Menu getMenu(){
+		return mOptionsMenu;
+	}
+
 	private class MenuArrayAdapter extends ArrayAdapter<String> {
 
 		//set to true of no menu item has an icon associated with it

@@ -5,8 +5,10 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
+import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.ActionMode;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -106,7 +108,6 @@ public class InputAccess {
 	 */
 	private boolean onPrepareOptionsMenu(Menu menu, boolean useAccessibleMenu){
 		if((menuDialog == null || !menuDialog.isShowing()) && (isTeclaIMESelected() || useAccessibleMenu)){
-			activity.closeOptionsMenu();
 			menuDialog = new MenuDialog(this.activity, menu);
 			menuDialog.setOnCancelListener(new OnCancelListener() {
 
@@ -115,16 +116,24 @@ public class InputAccess {
 						activity.getWindow().getCallback().onMenuItemSelected(Window.FEATURE_OPTIONS_PANEL, menuDialog.getSelectedMenuItem());
 				}
 			});
+			menuDialog.setOnDismissListener(new OnDismissListener() {
+
+				public void onDismiss(DialogInterface dialog) {
+					activity.getWindow().getCallback().onPanelClosed(Window.FEATURE_OPTIONS_PANEL, menuDialog.getMenu());
+				}
+			});
 			menuDialog.show();
 			InputAccess.showBelowIME(menuDialog);
 			return false;
 		}
-		else if(menuDialog != null && menuDialog.isShowing()){
-			activity.closeOptionsMenu();
-			menuDialog.dismiss();
-			return false;
-		}
 		return true;
+	}
+
+	public void closeOptionsMenu(){
+		activity.closeOptionsMenu();
+		if(menuDialog != null && menuDialog.isShowing()){
+			menuDialog.dismiss();
+		}
 	}
 
 	/**
