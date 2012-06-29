@@ -128,6 +128,10 @@ public class InputAccess {
 		return true;
 	}
 
+	/**
+	 * Call this method instead of your activity's closeOptionsMenu() to close
+	 * both the accessible and the standard options menu.
+	 */
 	public void closeOptionsMenu(){
 		activity.closeOptionsMenu();
 		if(menuDialog != null && menuDialog.isShowing()){
