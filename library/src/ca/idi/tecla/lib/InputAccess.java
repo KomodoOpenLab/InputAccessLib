@@ -113,8 +113,9 @@ public class InputAccess {
 			menuDialog.setOnCancelListener(new OnCancelListener() {
 
 				public void onCancel(DialogInterface dialog) {
-					if(menuDialog.getSelectedMenuItem() != null)
-						activity.getWindow().getCallback().onMenuItemSelected(Window.FEATURE_OPTIONS_PANEL, menuDialog.getSelectedMenuItem());
+					ca.idi.tecla.lib.menu.MenuItem selectedItem = (ca.idi.tecla.lib.menu.MenuItem)menuDialog.getSelectedMenuItem();
+					if(selectedItem != null && !selectedItem.invokeOnMenuItemClickListener())
+						activity.getWindow().getCallback().onMenuItemSelected(Window.FEATURE_OPTIONS_PANEL, selectedItem);
 				}
 			});
 			menuDialog.setOnDismissListener(new OnDismissListener() {
