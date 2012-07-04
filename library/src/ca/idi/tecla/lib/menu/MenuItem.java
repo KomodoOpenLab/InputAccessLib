@@ -18,8 +18,7 @@ public class MenuItem implements android.view.MenuItem{
 		subMenu = null;
 	}
 	
-	public MenuItem(android.view.MenuItem menuItem, ca.idi.tecla.lib.menu.SubMenu subMenu){
-		this.menuItem = menuItem;
+	public void setSubMenu(ca.idi.tecla.lib.menu.SubMenu subMenu){
 		this.subMenu = subMenu;
 	}
 

@@ -75,9 +75,11 @@ public class Menu implements android.view.Menu{
 //		subMenuMap.put(subMenu, mSubMenu);
 		
 		MenuItem item = subMenu.getItem();
-		ca.idi.tecla.lib.menu.MenuItem mItem = new ca.idi.tecla.lib.menu.MenuItem(item, mSubMenu);
+		ca.idi.tecla.lib.menu.MenuItem mItem = new ca.idi.tecla.lib.menu.MenuItem(item);
 		menuItemMap.put(item, mItem);
 		
+		mItem.setSubMenu(mSubMenu);
+		mSubMenu.setMenuItem(mItem);
 		return mSubMenu;
 	}
 
@@ -87,9 +89,11 @@ public class Menu implements android.view.Menu{
 //		subMenuMap.put(subMenu, mSubMenu);
 
 		MenuItem item = subMenu.getItem();
-		ca.idi.tecla.lib.menu.MenuItem mItem = new ca.idi.tecla.lib.menu.MenuItem(item, mSubMenu);
+		ca.idi.tecla.lib.menu.MenuItem mItem = new ca.idi.tecla.lib.menu.MenuItem(item);
 		menuItemMap.put(item, mItem);
-
+		
+		mItem.setSubMenu(mSubMenu);
+		mSubMenu.setMenuItem(mItem);
 		return mSubMenu;
 	}
 
@@ -100,9 +104,11 @@ public class Menu implements android.view.Menu{
 //		subMenuMap.put(subMenu, mSubMenu);
 
 		MenuItem item = subMenu.getItem();
-		ca.idi.tecla.lib.menu.MenuItem mItem = new ca.idi.tecla.lib.menu.MenuItem(item, mSubMenu);
+		ca.idi.tecla.lib.menu.MenuItem mItem = new ca.idi.tecla.lib.menu.MenuItem(item);
 		menuItemMap.put(item, mItem);
 
+		mItem.setSubMenu(mSubMenu);
+		mSubMenu.setMenuItem(mItem);
 		return mSubMenu;
 	}
 
@@ -112,9 +118,11 @@ public class Menu implements android.view.Menu{
 //		subMenuMap.put(subMenu, mSubMenu);
 
 		MenuItem item = subMenu.getItem();
-		ca.idi.tecla.lib.menu.MenuItem mItem = new ca.idi.tecla.lib.menu.MenuItem(item, mSubMenu);
+		ca.idi.tecla.lib.menu.MenuItem mItem = new ca.idi.tecla.lib.menu.MenuItem(item);
 		menuItemMap.put(item, mItem);
 
+		mItem.setSubMenu(mSubMenu);
+		mSubMenu.setMenuItem(mItem);
 		return mSubMenu;
 	}
 
