@@ -107,7 +107,7 @@ public class InputAccess {
 	 * @return false if the accessible version of the menu has been displayed after calling this method and true if
 	 * the default inaccessible version of the options menu has been displayed after calling this method.
 	 */
-	private boolean onPrepareOptionsMenu(Menu menu, boolean useAccessibleMenu){
+	private boolean onPrepareOptionsMenu(ca.idi.tecla.lib.menu.Menu menu, boolean useAccessibleMenu){
 		if((menuDialog == null || !menuDialog.isShowing()) && (isTeclaIMESelected() || useAccessibleMenu)){
 			menuDialog = new MenuDialog(this.activity, menu);
 			menuDialog.setOnCancelListener(new OnCancelListener() {
@@ -158,6 +158,8 @@ public class InputAccess {
 		final Callback cb = activity.getWindow().getCallback();
 
 		activity.getWindow().setCallback(new Callback() {
+			
+			private final ca.idi.tecla.lib.menu.Menu mMenu = new ca.idi.tecla.lib.menu.Menu();
 
 			public void onWindowFocusChanged(boolean hasFocus) {
 				if(hasFocus){
@@ -178,19 +180,19 @@ public class InputAccess {
 			}
 
 			public boolean onPreparePanel(int featureId, View view, Menu menu) {
-				boolean b = cb.onPreparePanel(featureId, view, menu);
+				boolean b = cb.onPreparePanel(featureId, view, mMenu);
 				if(b && featureId == Window.FEATURE_OPTIONS_PANEL){
-					return onPrepareOptionsMenu(menu, isDefaultMenu);
+					return onPrepareOptionsMenu(mMenu, isDefaultMenu);
 				}
 				return b;
 			}
 
 			public void onPanelClosed(int featureId, Menu menu) {
-				cb.onPanelClosed(featureId, menu);
+				cb.onPanelClosed(featureId, mMenu);
 			}
 
 			public boolean onMenuOpened(int featureId, Menu menu) {
-				return cb.onMenuOpened(featureId, menu);
+				return cb.onMenuOpened(featureId, mMenu);
 			}
 
 			public boolean onMenuItemSelected(int featureId, MenuItem item) {
@@ -206,7 +208,8 @@ public class InputAccess {
 			}
 
 			public boolean onCreatePanelMenu(int featureId, Menu menu) {
-				return cb.onCreatePanelMenu(featureId, menu);
+				mMenu.setMenu(menu);
+				return cb.onCreatePanelMenu(featureId, mMenu);
 			}
 
 			public void onContentChanged() {
