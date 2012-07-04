@@ -1,4 +1,4 @@
-package ca.idi.tecla.lib;
+package ca.idi.tecla.lib.menu;
 
 import java.util.LinkedList;
 import java.util.List;

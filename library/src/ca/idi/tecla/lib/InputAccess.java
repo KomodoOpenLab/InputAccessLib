@@ -1,6 +1,8 @@
 package ca.idi.tecla.lib;
 
 import java.lang.reflect.Method;
+
+import ca.idi.tecla.lib.menu.MenuDialog;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
