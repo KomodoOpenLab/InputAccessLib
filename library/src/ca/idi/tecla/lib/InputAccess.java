@@ -28,6 +28,7 @@ public class InputAccess {
 	private Activity activity;
 	//The accessible version of the options menu associated with the activity
 	private MenuDialog menuDialog = null;
+	private MenuDialog subMenuDialog = null;
 	//whether accessilbe options menu should be used even when Tecla Access keyboard is not
 	//the currently selected keyboard
 	private boolean isDefaultMenu;
@@ -114,8 +115,34 @@ public class InputAccess {
 
 				public void onCancel(DialogInterface dialog) {
 					ca.idi.tecla.lib.menu.MenuItem selectedItem = (ca.idi.tecla.lib.menu.MenuItem)menuDialog.getSelectedMenuItem();
-					if(selectedItem != null && !selectedItem.invokeOnMenuItemClickListener())
-						activity.getWindow().getCallback().onMenuItemSelected(Window.FEATURE_OPTIONS_PANEL, selectedItem);
+					//call the listener attached to the selected menu item
+					if(selectedItem != null && !selectedItem.invokeOnMenuItemClickListener()){
+						//call the onOptionsItemSelected() method of the activity
+						if(!activity.getWindow().getCallback().onMenuItemSelected(Window.FEATURE_OPTIONS_PANEL, selectedItem)){
+							//check if a submenu is attached to this menu item
+							if(selectedItem.hasSubMenu()){
+								subMenuDialog = new MenuDialog(activity, selectedItem.getSubMenu());
+								subMenuDialog.setCancelable(true);
+								subMenuDialog.setOnCancelListener(new OnCancelListener() {
+									
+									public void onCancel(DialogInterface dialog) {
+										ca.idi.tecla.lib.menu.MenuItem selectedSubMenuItem = (ca.idi.tecla.lib.menu.MenuItem) subMenuDialog.getSelectedMenuItem();
+										//call the listener attached to the selected sub menu item
+										if(selectedSubMenuItem != null && !selectedSubMenuItem.invokeOnMenuItemClickListener()){
+											//call the onOptionsItemSelected() method of the activity
+											if(!activity.getWindow().getCallback().onMenuItemSelected(Window.FEATURE_OPTIONS_PANEL, selectedSubMenuItem)){
+												//FIXME: handle the intent set to this menu item
+											}
+										}
+										else{
+											menuDialog.show();
+										}
+									}
+								});
+								subMenuDialog.show();
+							}
+						}
+					}
 				}
 			});
 			menuDialog.setOnDismissListener(new OnDismissListener() {
