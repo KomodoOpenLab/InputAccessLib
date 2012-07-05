@@ -87,7 +87,7 @@ public class MenuDialog {
 
 			public void onClick(DialogInterface dialog, int position) {
 				//set the selected item
-				setSelectedMenuItem(mOptionsMenu.getItem(position));
+				setSelectedMenuItem(menuItems.get(position));
 				//close the menu will in turn invoke 
 				//OnCancelListener where we will use this set selected menu item
 				alertDialog.cancel();
