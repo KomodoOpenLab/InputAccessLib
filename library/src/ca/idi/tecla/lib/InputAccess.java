@@ -132,6 +132,7 @@ public class InputAccess {
 											//call the onOptionsItemSelected() method of the activity
 											if(!activity.getWindow().getCallback().onMenuItemSelected(Window.FEATURE_OPTIONS_PANEL, selectedSubMenuItem)){
 												//FIXME: handle the intent set to this sub menu item
+												activity.startActivity(selectedSubMenuItem.getIntent());
 											}
 										}
 										else{
@@ -143,6 +144,7 @@ public class InputAccess {
 								subMenuDialog.show();
 							}
 							//FIXME: handle the intent set to menu item here
+							activity.startActivity(selectedItem.getIntent());
 						}
 					}
 				}
