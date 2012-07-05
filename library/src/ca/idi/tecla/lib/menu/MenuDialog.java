@@ -15,10 +15,13 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnClickListener;
 import android.content.DialogInterface.OnDismissListener;
+import android.content.DialogInterface.OnKeyListener;
 import android.content.DialogInterface.OnShowListener;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextThemeWrapper;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -99,15 +102,18 @@ public class MenuDialog {
 				setSelectedMenuItem(null);
 			}
 		});
+		dialog.setOnKeyListener(new OnKeyListener() {
+			
+			public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+//				Log.d("MenuDialog", "OnKeyListener keyevent : " + event.toString());
+				if(keyCode == KeyEvent.KEYCODE_MENU && event.getAction() == KeyEvent.ACTION_DOWN)
+					alertDialog.dismiss();
+				return false;
+			}
+		});
 		return dialog;
 	}
 	
-	//to close the menu dialog when the menu key is pressed again
-	public boolean onPrepareOptionsMenu(Menu menu){
-		alertDialog.dismiss();
-		return false;
-	}
-
 	public MenuDialog(Context context, Menu menu) {
 		mContext = context;
 		mOptionsMenu = menu;
