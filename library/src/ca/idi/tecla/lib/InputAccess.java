@@ -115,6 +115,7 @@ public class InputAccess {
 			menuDialog.getDialog().setOnCancelListener(new OnCancelListener() {
 
 				public void onCancel(DialogInterface dialog) {
+					Log.d("InputAccess","in cancel");
 					ca.idi.tecla.lib.menu.MenuItem selectedItem = (ca.idi.tecla.lib.menu.MenuItem)menuDialog.getSelectedMenuItem();
 					//call the listener attached to the selected menu item
 					if(selectedItem != null && !selectedItem.invokeOnMenuItemClickListener()){
@@ -127,7 +128,6 @@ public class InputAccess {
 								subMenuDialog.getDialog().setOnCancelListener(new OnCancelListener() {
 									
 									public void onCancel(DialogInterface dialog) {
-										Log.d("InputAccess","in cancel");
 										ca.idi.tecla.lib.menu.MenuItem selectedSubMenuItem = (ca.idi.tecla.lib.menu.MenuItem) subMenuDialog.getSelectedMenuItem();
 										//call the listener attached to the selected sub menu item
 										if(selectedSubMenuItem != null && !selectedSubMenuItem.invokeOnMenuItemClickListener()){
@@ -137,10 +137,6 @@ public class InputAccess {
 												if(selectedSubMenuItem.getIntent() != null)
 													activity.startActivity(selectedSubMenuItem.getIntent());
 											}
-										}
-										else{
-											menuDialog.refresh();
-											menuDialog.show();
 										}
 									}
 								});
@@ -156,8 +152,10 @@ public class InputAccess {
 			menuDialog.getDialog().setOnDismissListener(new OnDismissListener() {
 
 				public void onDismiss(DialogInterface dialog) {
-					Log.d("InputAccess","in dismiss");
-					activity.getWindow().getCallback().onPanelClosed(Window.FEATURE_OPTIONS_PANEL, menuDialog.getMenu());
+					Log.d("InputAccess","in dismiss sub menu dialog showing " + subMenuDialog.getDialog().isShowing());
+					//if sub menu opens up onPanelClosed will be called
+					if(subMenuDialog == null || !subMenuDialog.getDialog().isShowing())
+						activity.getWindow().getCallback().onPanelClosed(Window.FEATURE_OPTIONS_PANEL, menuDialog.getMenu());
 				}
 			});
 			menuDialog.show();
