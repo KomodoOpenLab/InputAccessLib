@@ -18,6 +18,10 @@ public class MenuItem implements android.view.MenuItem{
 		subMenu = null;
 	}
 	
+	/**
+	 * Set the sub menu(if any) associated with this menu item
+	 * @param subMenu the sub menu associated with this menu item
+	 */
 	public void setSubMenu(ca.idi.tecla.lib.menu.SubMenu subMenu){
 		this.subMenu = subMenu;
 	}

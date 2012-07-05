@@ -1,10 +1,8 @@
 package ca.idi.tecla.lib.menu;
 
 import java.util.HashMap;
-
 import android.app.AlertDialog;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
@@ -15,10 +13,14 @@ import android.view.View;
 public class SubMenu implements android.view.SubMenu{
 
 	private android.view.SubMenu subMenu;
+	//menu item which has this sub menu associated with it
 	private ca.idi.tecla.lib.menu.MenuItem menuItem;
+	//standard menu item to custom menu item map for this sub menu's menu items
 	private HashMap<android.view.MenuItem, ca.idi.tecla.lib.menu.MenuItem> menuItemMap;
-	private HashMap<Integer, Boolean> checkableItemMap;
+	//wheter a group of checkable menu items is exclusive group
+	private HashMap<Integer, Boolean> exclusiveItemMap;
 	
+	//to decide the header of the sub menu dialog
 	public static enum data_type{
 		integer,string,drawable,none
 	}
@@ -37,9 +39,13 @@ public class SubMenu implements android.view.SubMenu{
 	public SubMenu(android.view.SubMenu subMenu){
 		this.subMenu = subMenu;
 		menuItemMap = new HashMap<android.view.MenuItem, ca.idi.tecla.lib.menu.MenuItem>();
-		checkableItemMap = new HashMap<Integer, Boolean>();
+		exclusiveItemMap = new HashMap<Integer, Boolean>();
 	}
 	
+	/**
+	 * Set the menu item who has this sub menu associated to it.
+	 * @param menuItem is the menu item who has this sub menu associated to it.
+	 */
 	public void setMenuItem(ca.idi.tecla.lib.menu.MenuItem menuItem){
 		this.menuItem = menuItem;
 		header_title = (String) this.menuItem.getTitle();
@@ -104,7 +110,7 @@ public class SubMenu implements android.view.SubMenu{
 
 	public void clear() {
 		menuItemMap.clear();
-		checkableItemMap.clear();
+		exclusiveItemMap.clear();
 		subMenu.clear();
 	}
 
@@ -137,7 +143,7 @@ public class SubMenu implements android.view.SubMenu{
 	}
 
 	public void removeGroup(int groupId) {
-		checkableItemMap.remove(groupId);
+		exclusiveItemMap.remove(groupId);
 		subMenu.removeGroup(groupId);
 	}
 
@@ -147,13 +153,13 @@ public class SubMenu implements android.view.SubMenu{
 
 	public void setGroupCheckable(int group, boolean checkable,
 			boolean exclusive) {
-		checkableItemMap.put(group, exclusive);
+		exclusiveItemMap.put(group, exclusive);
 		subMenu.setGroupCheckable(group, checkable, exclusive);
 	}
 	
 	public boolean isExclusiveItem(MenuItem item){
 		int groupId = item.getGroupId();
-		Boolean exclusive = checkableItemMap.get(groupId);
+		Boolean exclusive = exclusiveItemMap.get(groupId);
 		if(exclusive == null){
 			//if setCheckable() was set to true but setGroupCheckable() was not used
 			return false;
@@ -240,6 +246,10 @@ public class SubMenu implements android.view.SubMenu{
 		return this;
 	}
 	
+	/**
+	 * Sets the header of this builder appropriately.
+	 * @param builder the builder whose header has to be set
+	 */
 	public void setHeader(AlertDialog.Builder builder){
 		if((header_type == HEADER_NONE) || (header_type == HEADER_TITLE && header_title_type == data_type.none)){
 			//no header

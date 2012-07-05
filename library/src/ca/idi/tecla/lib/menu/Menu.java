@@ -1,11 +1,8 @@
 package ca.idi.tecla.lib.menu;
 
 import java.util.HashMap;
-
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.SubMenu;
@@ -14,8 +11,6 @@ public class Menu implements android.view.Menu{
 
 	private android.view.Menu menu;
 	private HashMap<android.view.MenuItem, ca.idi.tecla.lib.menu.MenuItem> menuItemMap;
-	//no need of this map
-//	private HashMap<android.view.SubMenu, ca.idi.tecla.lib.SubMenu> subMenuMap;
 	
 	public Menu(android.view.Menu menu){
 		this.menu = menu;
@@ -26,6 +21,10 @@ public class Menu implements android.view.Menu{
 		menuItemMap = new HashMap<android.view.MenuItem, ca.idi.tecla.lib.menu.MenuItem>();
 	}
 
+	/**
+	 * Set the standard menu to support this custom Menu class
+	 * @param menu the options menu to be displayed
+	 */
 	public void setMenu(android.view.Menu menu){
 		this.menu = menu;
 		if(menuItemMap != null)
@@ -33,10 +32,11 @@ public class Menu implements android.view.Menu{
 		else{
 			menuItemMap = new HashMap<android.view.MenuItem, ca.idi.tecla.lib.menu.MenuItem>();
 		}
-//		subMenuMap.clear();
 	}
 	
 	public ca.idi.tecla.lib.menu.MenuItem add(CharSequence title) {
+		//store the created MenuItem in a HashMap with its custom MenuItem counterpart
+		//and return the custom MenuItem
 		android.view.MenuItem item = menu.add(title);
 		ca.idi.tecla.lib.menu.MenuItem menuItem = new ca.idi.tecla.lib.menu.MenuItem(item);
 		menuItemMap.put(item, menuItem);
@@ -71,9 +71,10 @@ public class Menu implements android.view.Menu{
 	}
 
 	public ca.idi.tecla.lib.menu.SubMenu addSubMenu(CharSequence title) {
+		//store the menu item created in a Hash map with its custom counterpart
 		SubMenu subMenu = menu.addSubMenu(title);
+		//creating custom subMenu
 		ca.idi.tecla.lib.menu.SubMenu mSubMenu = new ca.idi.tecla.lib.menu.SubMenu(subMenu);
-//		subMenuMap.put(subMenu, mSubMenu);
 		
 		MenuItem item = subMenu.getItem();
 		ca.idi.tecla.lib.menu.MenuItem mItem = new ca.idi.tecla.lib.menu.MenuItem(item);
@@ -87,7 +88,6 @@ public class Menu implements android.view.Menu{
 	public ca.idi.tecla.lib.menu.SubMenu addSubMenu(int titleRes) {
 		SubMenu subMenu = menu.addSubMenu(titleRes);
 		ca.idi.tecla.lib.menu.SubMenu mSubMenu = new ca.idi.tecla.lib.menu.SubMenu(subMenu);
-//		subMenuMap.put(subMenu, mSubMenu);
 
 		MenuItem item = subMenu.getItem();
 		ca.idi.tecla.lib.menu.MenuItem mItem = new ca.idi.tecla.lib.menu.MenuItem(item);
@@ -102,7 +102,6 @@ public class Menu implements android.view.Menu{
 			CharSequence title) {
 		SubMenu subMenu = menu.addSubMenu(groupId, itemId, order, title);
 		ca.idi.tecla.lib.menu.SubMenu mSubMenu = new ca.idi.tecla.lib.menu.SubMenu(subMenu);
-//		subMenuMap.put(subMenu, mSubMenu);
 
 		MenuItem item = subMenu.getItem();
 		ca.idi.tecla.lib.menu.MenuItem mItem = new ca.idi.tecla.lib.menu.MenuItem(item);
@@ -116,7 +115,6 @@ public class Menu implements android.view.Menu{
 	public ca.idi.tecla.lib.menu.SubMenu addSubMenu(int groupId, int itemId, int order, int titleRes) {
 		SubMenu subMenu = menu.addSubMenu(groupId, itemId, order, titleRes);
 		ca.idi.tecla.lib.menu.SubMenu mSubMenu = new ca.idi.tecla.lib.menu.SubMenu(subMenu);
-//		subMenuMap.put(subMenu, mSubMenu);
 
 		MenuItem item = subMenu.getItem();
 		ca.idi.tecla.lib.menu.MenuItem mItem = new ca.idi.tecla.lib.menu.MenuItem(item);
@@ -128,18 +126,18 @@ public class Menu implements android.view.Menu{
 	}
 
 	public void clear() {
+		//clear the map since all menu items have been removed
 		menuItemMap.clear();
-//		subMenuMap.clear();
 		menu.clear();
 	}
 
 	public void close() {
-		Log.d("Menu","close()");
 		menu.close();
 	}
 
 	public ca.idi.tecla.lib.menu.MenuItem findItem(int id) {
 		MenuItem item = menu.findItem(id);
+		//return the custom menu item from the hash map
 		return menuItemMap.get(item);
 	}
 

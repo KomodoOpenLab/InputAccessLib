@@ -10,7 +10,6 @@ import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
 import android.provider.Settings;
-import android.util.Log;
 import android.view.ActionMode;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -120,7 +119,6 @@ public class InputAccess {
 			menuDialog.getDialog().setOnCancelListener(new OnCancelListener() {
 
 				public void onCancel(DialogInterface dialog) {
-//					Log.d("InputAccess","in cancel");
 					ca.idi.tecla.lib.menu.MenuItem selectedItem = (ca.idi.tecla.lib.menu.MenuItem)menuDialog.getSelectedMenuItem();
 					//call the listener attached to the selected menu item
 					if(selectedItem != null && !selectedItem.invokeOnMenuItemClickListener()){
@@ -138,7 +136,6 @@ public class InputAccess {
 										if(selectedSubMenuItem != null && !selectedSubMenuItem.invokeOnMenuItemClickListener()){
 											//call the onOptionsItemSelected() method of the activity
 											if(!activity.getWindow().getCallback().onMenuItemSelected(Window.FEATURE_OPTIONS_PANEL, selectedSubMenuItem)){
-												//FIXME: handle the intent set to this sub menu item
 												if(selectedSubMenuItem.getIntent() != null)
 													activity.startActivity(selectedSubMenuItem.getIntent());
 											}
@@ -147,7 +144,6 @@ public class InputAccess {
 								});
 								subMenuDialog.show();
 							}
-							//FIXME: handle the intent set to menu item here
 							if(selectedItem.getIntent() != null)
 								activity.startActivity(selectedItem.getIntent());
 						}
@@ -157,7 +153,7 @@ public class InputAccess {
 			menuDialog.getDialog().setOnDismissListener(new OnDismissListener() {
 
 				public void onDismiss(DialogInterface dialog) {
-					//if sub menu opens up onPanelClosed will be called
+					//if sub menu opens up onPanelClosed should not be called
 					if(subMenuDialog == null || !subMenuDialog.getDialog().isShowing())
 						activity.getWindow().getCallback().onPanelClosed(Window.FEATURE_OPTIONS_PANEL, menuDialog.getMenu());
 				}
@@ -217,8 +213,6 @@ public class InputAccess {
 			}
 
 			public boolean onPreparePanel(int featureId, View view, Menu menu) {
-				Log.d("InputAccess", "1");
-				Log.d("InputAccess", ((callOnMenuOpened)?("hard menu key press"):("programatically opening options menu")));
 				boolean b = cb.onPreparePanel(featureId, view, (featureId == Window.FEATURE_OPTIONS_PANEL)?mMenu:menu);
 				if(b && featureId == Window.FEATURE_OPTIONS_PANEL){
 					boolean showStandardMenu = onPrepareOptionsMenu(mMenu, isDefaultMenu);
@@ -236,7 +230,6 @@ public class InputAccess {
 			}
 
 			public void onPanelClosed(int featureId, Menu menu) {
-				Log.d("InputAccess", "2");
 				if(featureId == Window.FEATURE_OPTIONS_PANEL)
 					cb.onPanelClosed(featureId, mMenu);
 				else
@@ -244,8 +237,8 @@ public class InputAccess {
 			}
 
 			public boolean onMenuOpened(int featureId, Menu menu) {
+				//since onMenuOpened has already been called
 				callOnMenuOpened = false;
-				Log.d("InputAccess", "3");
 				if(featureId == Window.FEATURE_OPTIONS_PANEL)
 					return cb.onMenuOpened(featureId, mMenu);
 				else
@@ -253,7 +246,6 @@ public class InputAccess {
 			}
 
 			public boolean onMenuItemSelected(int featureId, MenuItem item) {
-				Log.d("InputAccess", "4");
 				return cb.onMenuItemSelected(featureId, item);
 			}
 
@@ -262,12 +254,10 @@ public class InputAccess {
 			}
 
 			public View onCreatePanelView(int featureId) {
-				Log.d("InputAccess", "5");
 				return cb.onCreatePanelView(featureId);
 			}
 
 			public boolean onCreatePanelMenu(int featureId, Menu menu) {
-				Log.d("InputAccess", "6");
 				if(featureId == Window.FEATURE_OPTIONS_PANEL){
 					mMenu.setMenu(menu);
 					return cb.onCreatePanelMenu(featureId, mMenu);
@@ -299,7 +289,6 @@ public class InputAccess {
 
 			public boolean dispatchKeyEvent(KeyEvent event) {
 				boolean consumed = cb.dispatchKeyEvent(event);
-//				Log.d("InputAccess","inside dispatchKeyEvent event is " + event.toString());
 				callOnMenuOpened = true;
 				return consumed;
 			}

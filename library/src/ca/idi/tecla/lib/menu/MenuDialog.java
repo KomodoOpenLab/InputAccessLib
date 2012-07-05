@@ -3,37 +3,24 @@ package ca.idi.tecla.lib.menu;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-
 import ca.idi.tecla.lib.InputAccess;
 import ca.idi.tecla.view.R;
-import android.R.anim;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnClickListener;
-import android.content.DialogInterface.OnDismissListener;
 import android.content.DialogInterface.OnKeyListener;
 import android.content.DialogInterface.OnShowListener;
-import android.graphics.drawable.Drawable;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.ContextThemeWrapper;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckedTextView;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ListView;
 
 public class MenuDialog {
 
@@ -42,25 +29,39 @@ public class MenuDialog {
 	private Menu mOptionsMenu = null;
 	//the selected item in the list
 	private MenuItem selectedMenuItem;
+	
 	private int menu_type;
 	private static int MENU = 0;
 	private static int SUB_MENU = 1;
+	
 	private AlertDialog.Builder builder;
 	private AlertDialog alertDialog;
 	private ArrayList<MenuItem> menuItems;
 	
+	/**
+	 * Shows the accessible dialog created for this MenuDialog
+	 */
 	public void show(){
 		alertDialog.show();
 		InputAccess.showBelowIME(alertDialog);
 	}
 	
+	/**
+	 * Get the alert dialog created for this MenuDialog
+	 * @return the alert dialog created from the given menu
+	 */
 	public AlertDialog getDialog(){
 		return alertDialog;
 	}
 	
+	/**
+	 * Creates and returns an alert dialog
+	 * @return the alert dialog created by the builder
+	 */
     private AlertDialog create(){
 
     	if(menu_type == SUB_MENU){
+        	//sub menu may have a title
     		((ca.idi.tecla.lib.menu.SubMenu)mOptionsMenu).setHeader(builder);
     	}
     	
@@ -105,7 +106,7 @@ public class MenuDialog {
 		dialog.setOnKeyListener(new OnKeyListener() {
 			
 			public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-//				Log.d("MenuDialog", "OnKeyListener keyevent : " + event.toString());
+				//close the dialog if the hard menu key is pressed
 				if(keyCode == KeyEvent.KEYCODE_MENU && event.getAction() == KeyEvent.ACTION_DOWN)
 					alertDialog.dismiss();
 				return false;
@@ -128,6 +129,10 @@ public class MenuDialog {
 		alertDialog = create();
 	}
 	
+	/**
+	 * Menu passed to this class may have changed overtime.
+	 * Call this function to recreate the alert dialog for the changed menu.
+	 */
 	public void refresh(){
 		if(alertDialog != null && alertDialog.isShowing())
 			alertDialog.dismiss();
@@ -154,7 +159,7 @@ public class MenuDialog {
 
 	private class MenuArrayAdapter extends ArrayAdapter<Object> {
 
-		//set to true of no menu item has an icon associated with it
+		//set to true if no menu item has an icon associated with it
 		private boolean noDrawableSet;
 
 		public MenuArrayAdapter(Context context) {
@@ -192,6 +197,7 @@ public class MenuDialog {
 					return row;
 				}
 				else{
+					//whether to show a radio button or a check box
 					boolean exclusive = ((ca.idi.tecla.lib.menu.SubMenu)mOptionsMenu).isExclusiveItem(mItem);
 					int layout = 0;
 					if(exclusive)
