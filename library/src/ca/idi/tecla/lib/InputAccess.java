@@ -27,14 +27,19 @@ public class InputAccess {
 
 	//The activity whose options menu has to made accessible
 	private Activity activity;
+
 	//The accessible version of the options menu associated with the activity
 	private MenuDialog menuDialog = null;
 	private MenuDialog subMenuDialog = null;
+	
+	//whether method Activity.onMenuOpened() should be called
+	private boolean callOnMenuOpened;
+	
 	//whether accessilbe options menu should be used even when Tecla Access keyboard is not
 	//the currently selected keyboard
 	private boolean isDefaultMenu;
+	
 	private static final String TECLA_IME_ID = "ca.idi.tekla/.ime.TeclaIME";
-
 	private static Method dispatchGenericMotionEvent;
 	private static Method dispatchKeyShortcutEvent;
 	private static Method onActionModeFinished;
@@ -115,7 +120,7 @@ public class InputAccess {
 			menuDialog.getDialog().setOnCancelListener(new OnCancelListener() {
 
 				public void onCancel(DialogInterface dialog) {
-					Log.d("InputAccess","in cancel");
+//					Log.d("InputAccess","in cancel");
 					ca.idi.tecla.lib.menu.MenuItem selectedItem = (ca.idi.tecla.lib.menu.MenuItem)menuDialog.getSelectedMenuItem();
 					//call the listener attached to the selected menu item
 					if(selectedItem != null && !selectedItem.invokeOnMenuItemClickListener()){
@@ -157,7 +162,6 @@ public class InputAccess {
 						activity.getWindow().getCallback().onPanelClosed(Window.FEATURE_OPTIONS_PANEL, menuDialog.getMenu());
 				}
 			});
-			menuDialog.show();
 			return false;
 		}
 		return true;
@@ -214,9 +218,19 @@ public class InputAccess {
 
 			public boolean onPreparePanel(int featureId, View view, Menu menu) {
 				Log.d("InputAccess", "1");
+				Log.d("InputAccess", ((callOnMenuOpened)?("hard menu key press"):("programatically opening options menu")));
 				boolean b = cb.onPreparePanel(featureId, view, (featureId == Window.FEATURE_OPTIONS_PANEL)?mMenu:menu);
 				if(b && featureId == Window.FEATURE_OPTIONS_PANEL){
-					return onPrepareOptionsMenu(mMenu, isDefaultMenu);
+					boolean showStandardMenu = onPrepareOptionsMenu(mMenu, isDefaultMenu);
+					if(showStandardMenu){
+						return true;
+					}
+					else if(!callOnMenuOpened ||(callOnMenuOpened && activity.getWindow().getCallback().onMenuOpened(Window.FEATURE_OPTIONS_PANEL, menu))){
+						if(menuDialog != null)
+							menuDialog.show();
+						return false;
+					}
+					return false;
 				}
 				return b;
 			}
@@ -230,6 +244,7 @@ public class InputAccess {
 			}
 
 			public boolean onMenuOpened(int featureId, Menu menu) {
+				callOnMenuOpened = false;
 				Log.d("InputAccess", "3");
 				if(featureId == Window.FEATURE_OPTIONS_PANEL)
 					return cb.onMenuOpened(featureId, mMenu);
@@ -257,7 +272,7 @@ public class InputAccess {
 					mMenu.setMenu(menu);
 					return cb.onCreatePanelMenu(featureId, mMenu);
 				}
-				else{ 
+				else{
 					return cb.onCreatePanelMenu(featureId, menu);
 				}
 			}
@@ -283,7 +298,10 @@ public class InputAccess {
 			}
 
 			public boolean dispatchKeyEvent(KeyEvent event) {
-				return cb.dispatchKeyEvent(event);
+				boolean consumed = cb.dispatchKeyEvent(event);
+//				Log.d("InputAccess","inside dispatchKeyEvent event is " + event.toString());
+				callOnMenuOpened = true;
+				return consumed;
 			}
 
 			public boolean dispatchGenericMotionEvent(MotionEvent event) {
