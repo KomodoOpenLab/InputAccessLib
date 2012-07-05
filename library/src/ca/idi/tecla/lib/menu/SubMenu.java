@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
@@ -197,7 +196,6 @@ public class SubMenu implements android.view.SubMenu{
 	}
 
 	public ca.idi.tecla.lib.menu.SubMenu setHeaderIcon(int iconRes) {
-		Log.d("SubMenu", "here in setHeaderIcon");
 		header_type = HEADER_TITLE;
 		header_icon_int = iconRes;
 		header_icon_type = data_type.integer;

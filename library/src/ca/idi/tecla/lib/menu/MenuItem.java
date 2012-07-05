@@ -2,7 +2,6 @@ package ca.idi.tecla.lib.menu;
 
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
 import android.view.ActionProvider;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View;
@@ -173,7 +172,6 @@ public class MenuItem implements android.view.MenuItem{
 
 	public ca.idi.tecla.lib.menu.MenuItem setOnMenuItemClickListener(
 			OnMenuItemClickListener menuItemClickListener) {
-		Log.d("MenuItem","setOnMenuItemClickListener()");
 		mClickListener = menuItemClickListener;
 		menuItem.setOnMenuItemClickListener(menuItemClickListener);
 		return this;
