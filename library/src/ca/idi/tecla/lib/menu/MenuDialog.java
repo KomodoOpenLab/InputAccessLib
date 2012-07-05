@@ -26,6 +26,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CheckedTextView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -179,8 +180,23 @@ public class MenuDialog {
 				return row;
 			}
 			else{
-				//to be changed
-				return null;
+				if(!mItem.isCheckable()){
+					TextView row = (TextView) ((Activity)mContext).getLayoutInflater().inflate(android.R.layout.select_dialog_item, parent, false);
+					row.setText(mItem.getTitle());
+					return row;
+				}
+				else{
+					boolean exclusive = ((ca.idi.tecla.lib.menu.SubMenu)mOptionsMenu).isExclusiveItem(mItem);
+					int layout = 0;
+					if(exclusive)
+						layout = android.R.layout.select_dialog_singlechoice;
+					else
+						layout = android.R.layout.select_dialog_multichoice;
+					CheckedTextView row = (CheckedTextView) ((Activity)mContext).getLayoutInflater().inflate(layout, parent, false);
+					row.setText(mItem.getTitle());
+					row.setChecked(mItem.isChecked());
+					return row;
+				}
 			}
 		}
 	}
