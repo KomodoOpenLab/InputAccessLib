@@ -3,6 +3,7 @@ package ca.idi.tecla.lib.menu;
 import java.util.HashMap;
 
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import android.view.KeyEvent;

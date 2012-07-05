@@ -109,9 +109,9 @@ public class InputAccess {
 	 * the default inaccessible version of the options menu has been displayed after calling this method.
 	 */
 	private boolean onPrepareOptionsMenu(ca.idi.tecla.lib.menu.Menu menu, boolean useAccessibleMenu){
-		if((menuDialog == null || !menuDialog.isShowing()) && (isTeclaIMESelected() || useAccessibleMenu)){
+		if((menuDialog == null || !menuDialog.getDialog().isShowing()) && (isTeclaIMESelected() || useAccessibleMenu)){
 			menuDialog = new MenuDialog(this.activity, menu);
-			menuDialog.setOnCancelListener(new OnCancelListener() {
+			menuDialog.getDialog().setOnCancelListener(new OnCancelListener() {
 
 				public void onCancel(DialogInterface dialog) {
 					ca.idi.tecla.lib.menu.MenuItem selectedItem = (ca.idi.tecla.lib.menu.MenuItem)menuDialog.getSelectedMenuItem();
@@ -122,8 +122,8 @@ public class InputAccess {
 							//check if a submenu is attached to this menu item
 							if(selectedItem.hasSubMenu()){
 								subMenuDialog = new MenuDialog(activity, selectedItem.getSubMenu());
-								subMenuDialog.setCancelable(true);
-								subMenuDialog.setOnCancelListener(new OnCancelListener() {
+								subMenuDialog.getDialog().setCancelable(true);
+								subMenuDialog.getDialog().setOnCancelListener(new OnCancelListener() {
 									
 									public void onCancel(DialogInterface dialog) {
 										ca.idi.tecla.lib.menu.MenuItem selectedSubMenuItem = (ca.idi.tecla.lib.menu.MenuItem) subMenuDialog.getSelectedMenuItem();
@@ -131,7 +131,7 @@ public class InputAccess {
 										if(selectedSubMenuItem != null && !selectedSubMenuItem.invokeOnMenuItemClickListener()){
 											//call the onOptionsItemSelected() method of the activity
 											if(!activity.getWindow().getCallback().onMenuItemSelected(Window.FEATURE_OPTIONS_PANEL, selectedSubMenuItem)){
-												//FIXME: handle the intent set to this menu item
+												//FIXME: handle the intent set to this sub menu item
 											}
 										}
 										else{
@@ -141,18 +141,18 @@ public class InputAccess {
 								});
 								subMenuDialog.show();
 							}
+							//FIXME: handle the intent set to menu item here
 						}
 					}
 				}
 			});
-			menuDialog.setOnDismissListener(new OnDismissListener() {
+			menuDialog.getDialog().setOnDismissListener(new OnDismissListener() {
 
 				public void onDismiss(DialogInterface dialog) {
 					activity.getWindow().getCallback().onPanelClosed(Window.FEATURE_OPTIONS_PANEL, menuDialog.getMenu());
 				}
 			});
 			menuDialog.show();
-			InputAccess.showBelowIME(menuDialog);
 			return false;
 		}
 		return true;
@@ -164,8 +164,8 @@ public class InputAccess {
 	 */
 	public void closeOptionsMenu(){
 		activity.closeOptionsMenu();
-		if(menuDialog != null && menuDialog.isShowing()){
-			menuDialog.dismiss();
+		if(menuDialog != null && menuDialog.getDialog().isShowing()){
+			menuDialog.getDialog().dismiss();
 		}
 	}
 

@@ -3,12 +3,21 @@ package ca.idi.tecla.lib.menu;
 import java.util.LinkedList;
 import java.util.List;
 
+import ca.idi.tecla.lib.InputAccess;
 import ca.idi.tecla.view.R;
+import android.R.anim;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
+import android.content.DialogInterface.OnClickListener;
+import android.content.DialogInterface.OnDismissListener;
+import android.content.DialogInterface.OnShowListener;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.ContextThemeWrapper;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,7 +30,7 @@ import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
-public class MenuDialog extends Dialog {
+public class MenuDialog {
 
 	private Context mContext;
 	//the options menu to convert
@@ -30,16 +39,27 @@ public class MenuDialog extends Dialog {
 	private MenuItem selectedMenuItem;
 	private String[] item_title;
 	private Drawable[] item_icon;
+	private int menu_type;
+	private static int MENU = 0;
+	private static int SUB_MENU = 1;
+	private AlertDialog.Builder builder;
+	private AlertDialog alertDialog;
 	
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		
-		//whenever the accessible menu is generated no items is selected
-		selectedMenuItem = null;
+	public void show(){
+		alertDialog.show();
+		InputAccess.showBelowIME(alertDialog);
+	}
+	
+	public AlertDialog getDialog(){
+		return alertDialog;
+	}
+	
+    private AlertDialog create(){
 
-		//creating a list view and attaching a custom adapter to it
-		ListView lview = new ListView(getContext());
+    	if(menu_type == SUB_MENU){
+    		((ca.idi.tecla.lib.menu.SubMenu)mOptionsMenu).setHeader(builder);
+    	}
+    	
 		List<MenuItem> menuItems = new LinkedList<MenuItem>();
 		int index=0;
 		while(mOptionsMenu != null && true){
@@ -62,33 +82,53 @@ public class MenuDialog extends Dialog {
 			}
 		}
 
-		lview.setAdapter(new MenuArrayAdapter(mContext));
-		lview.setOnItemClickListener(new OnItemClickListener() {
+		builder.setAdapter(new MenuArrayAdapter(mContext), new OnClickListener() {
 
-			public void onItemClick(AdapterView<?> arg0, View view, int position,
-					long id) {
+			public void onClick(DialogInterface dialog, int position) {
 				//set the selected item
 				setSelectedMenuItem(mOptionsMenu.getItem(position));
-				//close the menu
-				//will in turn invoke OnCancelListener where we will use this set selected menu item
-				cancel();
+				//close the menu will in turn invoke 
+				//OnCancelListener where we will use this set selected menu item
+				alertDialog.cancel();
 			}
 
 		});
-	    setContentView(lview);
+
+		AlertDialog dialog = builder.create();
+		dialog.setOnShowListener(new OnShowListener() {
+			
+			public void onShow(DialogInterface dialog) {
+				setSelectedMenuItem(null);
+			}
+		});
+		return dialog;
 	}
 	
 	//to close the menu dialog when the menu key is pressed again
 	public boolean onPrepareOptionsMenu(Menu menu){
-		dismiss();
+		alertDialog.dismiss();
 		return false;
 	}
 
 	public MenuDialog(Context context, Menu menu) {
-		super(context);
 		mContext = context;
 		mOptionsMenu = menu;
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		if(menu instanceof ca.idi.tecla.lib.menu.SubMenu){
+			menu_type = SUB_MENU;
+		}
+		else{
+			menu_type = MENU;
+		}
+		builder = new AlertDialog.Builder(mContext);
+		alertDialog = create();
+	}
+	
+	public void refresh(){
+		if(alertDialog != null && alertDialog.isShowing())
+			alertDialog.dismiss();
+		setSelectedMenuItem(null);
+		builder = new AlertDialog.Builder(mContext);
+		alertDialog = create();
 	}
 
 	private void setSelectedMenuItem(MenuItem menu_item){
@@ -127,18 +167,21 @@ public class MenuDialog extends Dialog {
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			View row = ((Activity)mContext).getLayoutInflater().inflate(R.layout.accessible_menu_item, parent, false);
+			if(true){//menu_type == MENU){
+				View row = ((Activity)mContext).getLayoutInflater().inflate(R.layout.accessible_menu_item, parent, false);
 
-			ImageView imageView = (ImageView)row.findViewById(R.id.accessible_menu_item_icon);
-			TextView textView = (TextView)row.findViewById(R.id.accessible_menu_item_label);
-			imageView.setImageDrawable(item_icon[position]);
-			textView.setText(item_title[position]);
-
-			//in case no item in the list has an icon associated with it
-			if(noDrawableSet){
-				imageView.setVisibility(View.GONE);
+				ImageView imageView = (ImageView)row.findViewById(R.id.accessible_menu_item_icon);
+				TextView textView = (TextView)row.findViewById(R.id.accessible_menu_item_label);
+				imageView.setImageDrawable(item_icon[position]);
+				textView.setText(item_title[position]);
+	
+				//in case no item in the list has an icon associated with it
+				if(noDrawableSet){
+					imageView.setVisibility(View.GONE);
+				}
+				return row;
 			}
-			return row;
+			return null;
 		}
 	}
 
