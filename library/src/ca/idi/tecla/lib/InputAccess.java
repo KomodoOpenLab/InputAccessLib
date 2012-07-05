@@ -135,6 +135,7 @@ public class InputAccess {
 											}
 										}
 										else{
+											menuDialog.refresh();
 											menuDialog.show();
 										}
 									}

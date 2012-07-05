@@ -1,5 +1,6 @@
 package ca.idi.tecla.lib.menu;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -37,13 +38,12 @@ public class MenuDialog {
 	private Menu mOptionsMenu = null;
 	//the selected item in the list
 	private MenuItem selectedMenuItem;
-	private String[] item_title;
-	private Drawable[] item_icon;
 	private int menu_type;
 	private static int MENU = 0;
 	private static int SUB_MENU = 1;
 	private AlertDialog.Builder builder;
 	private AlertDialog alertDialog;
+	private ArrayList<MenuItem> menuItems;
 	
 	public void show(){
 		alertDialog.show();
@@ -60,25 +60,22 @@ public class MenuDialog {
     		((ca.idi.tecla.lib.menu.SubMenu)mOptionsMenu).setHeader(builder);
     	}
     	
-		List<MenuItem> menuItems = new LinkedList<MenuItem>();
+		List<MenuItem> items = new LinkedList<MenuItem>();
 		int index=0;
-		while(mOptionsMenu != null && true){
+		while(mOptionsMenu != null){
 			try{
-				menuItems.add(mOptionsMenu.getItem(index));
+				items.add(mOptionsMenu.getItem(index));
 			}catch(Exception exp){
 				break;
 			}
 			index++;
 		}
 
-		item_title = new String[menuItems.size()];
-		item_icon = new Drawable[menuItems.size()];
-
-		for(int i=0;i<item_title.length;i++){
-			MenuItem obj = menuItems.get(i);
+		menuItems.clear();
+		for(int i=0;i<items.size();i++){
+			MenuItem obj = items.get(i);
 			if(obj.isEnabled() && obj.isVisible()){
-				item_title[i] = (String) obj.getTitle();
-				item_icon[i] = menuItems.get(i).getIcon();
+				menuItems.add(obj);
 			}
 		}
 
@@ -119,6 +116,7 @@ public class MenuDialog {
 		else{
 			menu_type = MENU;
 		}
+		menuItems = new ArrayList<MenuItem>();
 		builder = new AlertDialog.Builder(mContext);
 		alertDialog = create();
 	}
@@ -147,33 +145,32 @@ public class MenuDialog {
 		return mOptionsMenu;
 	}
 
-	private class MenuArrayAdapter extends ArrayAdapter<String> {
+	private class MenuArrayAdapter extends ArrayAdapter<Object> {
 
 		//set to true of no menu item has an icon associated with it
 		private boolean noDrawableSet;
 
 		public MenuArrayAdapter(Context context) {
-			super(context, 0, item_title);
+			super(context, 0, menuItems.toArray());
 			noDrawableSet = true;
-			if(item_icon != null){
-				for(int i=0;i<item_icon.length;i++){
-					if(item_icon[i] != null){
-						noDrawableSet = false;
-						break;
-					}
+			for(int i=0;i<menuItems.size();i++){
+				if(menuItems.get(i).getIcon() != null){
+					noDrawableSet = false;
+					break;
 				}
 			}
 		}
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			if(true){//menu_type == MENU){
+			ca.idi.tecla.lib.menu.MenuItem mItem = (ca.idi.tecla.lib.menu.MenuItem) menuItems.get(position);
+			if(menu_type == MENU){
 				View row = ((Activity)mContext).getLayoutInflater().inflate(R.layout.accessible_menu_item, parent, false);
 
 				ImageView imageView = (ImageView)row.findViewById(R.id.accessible_menu_item_icon);
 				TextView textView = (TextView)row.findViewById(R.id.accessible_menu_item_label);
-				imageView.setImageDrawable(item_icon[position]);
-				textView.setText(item_title[position]);
+				imageView.setImageDrawable(mItem.getIcon());
+				textView.setText(mItem.getTitle());
 	
 				//in case no item in the list has an icon associated with it
 				if(noDrawableSet){
@@ -181,7 +178,10 @@ public class MenuDialog {
 				}
 				return row;
 			}
-			return null;
+			else{
+				//to be changed
+				return null;
+			}
 		}
 	}
 
