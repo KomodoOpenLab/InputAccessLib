@@ -152,7 +152,6 @@ public class InputAccess {
 			menuDialog.getDialog().setOnDismissListener(new OnDismissListener() {
 
 				public void onDismiss(DialogInterface dialog) {
-					Log.d("InputAccess","in dismiss sub menu dialog showing " + subMenuDialog.getDialog().isShowing());
 					//if sub menu opens up onPanelClosed will be called
 					if(subMenuDialog == null || !subMenuDialog.getDialog().isShowing())
 						activity.getWindow().getCallback().onPanelClosed(Window.FEATURE_OPTIONS_PANEL, menuDialog.getMenu());
