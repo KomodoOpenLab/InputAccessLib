@@ -30,14 +30,14 @@ public class InputAccess {
 	//The accessible version of the options menu associated with the activity
 	private MenuDialog menuDialog = null;
 	private MenuDialog subMenuDialog = null;
-	
+
 	//whether method Activity.onMenuOpened() should be called
 	private boolean callOnMenuOpened;
-	
+
 	//whether accessilbe options menu should be used even when Tecla Access keyboard is not
 	//the currently selected keyboard
 	private boolean isDefaultMenu;
-	
+
 	private static final String TECLA_IME_ID = "ca.idi.tekla/.ime.TeclaIME";
 	private static Method dispatchGenericMotionEvent;
 	private static Method dispatchKeyShortcutEvent;
@@ -46,42 +46,42 @@ public class InputAccess {
 	private static Method onWindowStartingActionMode;
 
 	static{
-		 try {
-             Class<?> partypes[] = new Class[1];
-             partypes[0] = MotionEvent.class;
-             dispatchGenericMotionEvent = Callback.class.getMethod("dispatchGenericMotionEvent", partypes);
-		 } catch (NoSuchMethodException e) {
-		 }
+		try {
+			Class<?> partypes[] = new Class[1];
+			partypes[0] = MotionEvent.class;
+			dispatchGenericMotionEvent = Callback.class.getMethod("dispatchGenericMotionEvent", partypes);
+		} catch (NoSuchMethodException e) {
+		}
 
-		 try {
-             Class<?> partypes[] = new Class[1];
-             partypes[0] = KeyEvent.class;
-             dispatchKeyShortcutEvent = Callback.class.getMethod("dispatchKeyShortcutEvent", partypes);
-		 } catch (NoSuchMethodException e) {
-		 }
+		try {
+			Class<?> partypes[] = new Class[1];
+			partypes[0] = KeyEvent.class;
+			dispatchKeyShortcutEvent = Callback.class.getMethod("dispatchKeyShortcutEvent", partypes);
+		} catch (NoSuchMethodException e) {
+		}
 
-		 try {
-             Class<?> partypes[] = new Class[1];
-             partypes[0] = ActionMode.class;
-             onActionModeFinished = Callback.class.getMethod("onActionModeFinished", partypes);
-		 } catch (NoSuchMethodException e) {
-		 }
+		try {
+			Class<?> partypes[] = new Class[1];
+			partypes[0] = ActionMode.class;
+			onActionModeFinished = Callback.class.getMethod("onActionModeFinished", partypes);
+		} catch (NoSuchMethodException e) {
+		}
 
-		 try {
-             Class<?> partypes[] = new Class[1];
-             partypes[0] = ActionMode.class;
-             onActionModeStarted = Callback.class.getMethod("onActionModeStarted", partypes);
-		 } catch (NoSuchMethodException e) {
-		 }
+		try {
+			Class<?> partypes[] = new Class[1];
+			partypes[0] = ActionMode.class;
+			onActionModeStarted = Callback.class.getMethod("onActionModeStarted", partypes);
+		} catch (NoSuchMethodException e) {
+		}
 
-		 try {
-             Class<?> partypes[] = new Class[1];
-             partypes[0] = android.view.ActionMode.Callback.class;
-             onWindowStartingActionMode = Callback.class.getMethod("onWindowStartingActionMode", partypes);
-		 } catch (NoSuchMethodException e) {
-		 }
+		try {
+			Class<?> partypes[] = new Class[1];
+			partypes[0] = android.view.ActionMode.Callback.class;
+			onWindowStartingActionMode = Callback.class.getMethod("onWindowStartingActionMode", partypes);
+		} catch (NoSuchMethodException e) {
+		}
 
-}
+	}
 
 	/**
 	 * Create an object only if you wish to implement the accessible version of the options menu.
@@ -103,7 +103,7 @@ public class InputAccess {
 		this.activity = activity;
 		this.isDefaultMenu = isDefaultMenu;
 	}
-	
+
 	/**
 	 * It displays the options menu and returns a boolean value.
 	 * @param menu the options menu to be displayed
@@ -129,7 +129,7 @@ public class InputAccess {
 								subMenuDialog = new MenuDialog(activity, selectedItem.getSubMenu());
 								subMenuDialog.getDialog().setCancelable(true);
 								subMenuDialog.getDialog().setOnCancelListener(new OnCancelListener() {
-									
+
 									public void onCancel(DialogInterface dialog) {
 										ca.idi.tecla.lib.menu.MenuItem selectedSubMenuItem = (ca.idi.tecla.lib.menu.MenuItem) subMenuDialog.getSelectedMenuItem();
 										//call the listener attached to the selected sub menu item
@@ -191,7 +191,7 @@ public class InputAccess {
 		final Callback cb = activity.getWindow().getCallback();
 
 		activity.getWindow().setCallback(new Callback() {
-			
+
 			private final ca.idi.tecla.lib.menu.Menu mMenu = new ca.idi.tecla.lib.menu.Menu();
 
 			public void onWindowFocusChanged(boolean hasFocus) {

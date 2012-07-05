@@ -12,12 +12,12 @@ public class MenuItem implements android.view.MenuItem{
 	private android.view.MenuItem menuItem;
 	private ca.idi.tecla.lib.menu.SubMenu subMenu;
 	private OnMenuItemClickListener mClickListener;
-	
+
 	public MenuItem(android.view.MenuItem menuItem){
 		this.menuItem = menuItem;
 		subMenu = null;
 	}
-	
+
 	/**
 	 * Set the sub menu(if any) associated with this menu item
 	 * @param subMenu the sub menu associated with this menu item
@@ -212,11 +212,11 @@ public class MenuItem implements android.view.MenuItem{
 		menuItem.setVisible(visible);
 		return this;
 	}
-	
+
 	public OnMenuItemClickListener getOnMenuItemClickListener(){
 		return mClickListener;
 	}
-	
+
 	public boolean invokeOnMenuItemClickListener(){
 		if(mClickListener == null)
 			return false;

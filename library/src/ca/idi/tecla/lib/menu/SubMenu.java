@@ -19,7 +19,7 @@ public class SubMenu implements android.view.SubMenu{
 	private HashMap<android.view.MenuItem, ca.idi.tecla.lib.menu.MenuItem> menuItemMap;
 	//wheter a group of checkable menu items is exclusive group
 	private HashMap<Integer, Boolean> exclusiveItemMap;
-	
+
 	//to decide the header of the sub menu dialog
 	public static enum data_type{
 		integer,string,drawable,none
@@ -35,13 +35,13 @@ public class SubMenu implements android.view.SubMenu{
 	private String header_title;
 	private int header_title_int;
 	private View header_view;
-	
+
 	public SubMenu(android.view.SubMenu subMenu){
 		this.subMenu = subMenu;
 		menuItemMap = new HashMap<android.view.MenuItem, ca.idi.tecla.lib.menu.MenuItem>();
 		exclusiveItemMap = new HashMap<Integer, Boolean>();
 	}
-	
+
 	/**
 	 * Set the menu item who has this sub menu associated to it.
 	 * @param menuItem is the menu item who has this sub menu associated to it.
@@ -51,7 +51,7 @@ public class SubMenu implements android.view.SubMenu{
 		header_title = (String) this.menuItem.getTitle();
 		header_title_type = data_type.string;
 	}
-	
+
 	public ca.idi.tecla.lib.menu.MenuItem add(CharSequence title) {
 		MenuItem item = subMenu.add(title);
 		ca.idi.tecla.lib.menu.MenuItem mItem = new ca.idi.tecla.lib.menu.MenuItem(item);
@@ -156,7 +156,7 @@ public class SubMenu implements android.view.SubMenu{
 		exclusiveItemMap.put(group, exclusive);
 		subMenu.setGroupCheckable(group, checkable, exclusive);
 	}
-	
+
 	public boolean isExclusiveItem(MenuItem item){
 		int groupId = item.getGroupId();
 		Boolean exclusive = exclusiveItemMap.get(groupId);
@@ -245,7 +245,7 @@ public class SubMenu implements android.view.SubMenu{
 		subMenu.setIcon(icon);
 		return this;
 	}
-	
+
 	/**
 	 * Sets the header of this builder appropriately.
 	 * @param builder the builder whose header has to be set
@@ -268,5 +268,5 @@ public class SubMenu implements android.view.SubMenu{
 				builder.setIcon(header_icon_int);
 		}
 	}
-	
+
 }

@@ -29,15 +29,15 @@ public class MenuDialog {
 	private Menu mOptionsMenu = null;
 	//the selected item in the list
 	private MenuItem selectedMenuItem;
-	
+
 	private int menu_type;
 	private static int MENU = 0;
 	private static int SUB_MENU = 1;
-	
+
 	private AlertDialog.Builder builder;
 	private AlertDialog alertDialog;
 	private ArrayList<MenuItem> menuItems;
-	
+
 	/**
 	 * Shows the accessible dialog created for this MenuDialog
 	 */
@@ -45,7 +45,7 @@ public class MenuDialog {
 		alertDialog.show();
 		InputAccess.showBelowIME(alertDialog);
 	}
-	
+
 	/**
 	 * Get the alert dialog created for this MenuDialog
 	 * @return the alert dialog created from the given menu
@@ -53,18 +53,18 @@ public class MenuDialog {
 	public AlertDialog getDialog(){
 		return alertDialog;
 	}
-	
+
 	/**
 	 * Creates and returns an alert dialog
 	 * @return the alert dialog created by the builder
 	 */
-    private AlertDialog create(){
+	private AlertDialog create(){
 
-    	if(menu_type == SUB_MENU){
-        	//sub menu may have a title
-    		((ca.idi.tecla.lib.menu.SubMenu)mOptionsMenu).setHeader(builder);
-    	}
-    	
+		if(menu_type == SUB_MENU){
+			//sub menu may have a title
+			((ca.idi.tecla.lib.menu.SubMenu)mOptionsMenu).setHeader(builder);
+		}
+
 		List<MenuItem> items = new LinkedList<MenuItem>();
 		int index=0;
 		while(mOptionsMenu != null){
@@ -98,13 +98,13 @@ public class MenuDialog {
 
 		AlertDialog dialog = builder.create();
 		dialog.setOnShowListener(new OnShowListener() {
-			
+
 			public void onShow(DialogInterface dialog) {
 				setSelectedMenuItem(null);
 			}
 		});
 		dialog.setOnKeyListener(new OnKeyListener() {
-			
+
 			public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
 				//close the dialog if the hard menu key is pressed
 				if(keyCode == KeyEvent.KEYCODE_MENU && event.getAction() == KeyEvent.ACTION_DOWN)
@@ -114,7 +114,7 @@ public class MenuDialog {
 		});
 		return dialog;
 	}
-	
+
 	public MenuDialog(Context context, Menu menu) {
 		mContext = context;
 		mOptionsMenu = menu;
@@ -128,7 +128,7 @@ public class MenuDialog {
 		builder = new AlertDialog.Builder(mContext);
 		alertDialog = create();
 	}
-	
+
 	/**
 	 * Menu passed to this class may have changed overtime.
 	 * Call this function to recreate the alert dialog for the changed menu.
@@ -144,7 +144,7 @@ public class MenuDialog {
 	private void setSelectedMenuItem(MenuItem menu_item){
 		selectedMenuItem = menu_item;
 	}
-	
+
 	public MenuItem getSelectedMenuItem(){
 		return selectedMenuItem;
 	}
@@ -183,7 +183,7 @@ public class MenuDialog {
 				TextView textView = (TextView)row.findViewById(R.id.accessible_menu_item_label);
 				imageView.setImageDrawable(mItem.getIcon());
 				textView.setText(mItem.getTitle());
-	
+
 				//in case no item in the list has an icon associated with it
 				if(noDrawableSet){
 					imageView.setVisibility(View.GONE);
