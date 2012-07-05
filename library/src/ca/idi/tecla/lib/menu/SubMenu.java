@@ -42,6 +42,8 @@ public class SubMenu implements android.view.SubMenu{
 	
 	public void setMenuItem(ca.idi.tecla.lib.menu.MenuItem menuItem){
 		this.menuItem = menuItem;
+		header_title = (String) this.menuItem.getTitle();
+		header_title_type = data_type.string;
 	}
 	
 	public ca.idi.tecla.lib.menu.MenuItem add(CharSequence title) {
@@ -153,8 +155,8 @@ public class SubMenu implements android.view.SubMenu{
 		int groupId = item.getGroupId();
 		Boolean exclusive = checkableItemMap.get(groupId);
 		if(exclusive == null){
-			Log.e("ca.idi.tecla.lib.SubMenu", "This should never happen. This is an error");
-			return true;
+			//if setCheckable() was set to true but setGroupCheckable() was not used
+			return false;
 		}
 		else{
 			return exclusive;

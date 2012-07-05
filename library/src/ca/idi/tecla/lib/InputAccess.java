@@ -10,6 +10,7 @@ import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.ActionMode;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -126,13 +127,15 @@ public class InputAccess {
 								subMenuDialog.getDialog().setOnCancelListener(new OnCancelListener() {
 									
 									public void onCancel(DialogInterface dialog) {
+										Log.d("InputAccess","in cancel");
 										ca.idi.tecla.lib.menu.MenuItem selectedSubMenuItem = (ca.idi.tecla.lib.menu.MenuItem) subMenuDialog.getSelectedMenuItem();
 										//call the listener attached to the selected sub menu item
 										if(selectedSubMenuItem != null && !selectedSubMenuItem.invokeOnMenuItemClickListener()){
 											//call the onOptionsItemSelected() method of the activity
 											if(!activity.getWindow().getCallback().onMenuItemSelected(Window.FEATURE_OPTIONS_PANEL, selectedSubMenuItem)){
 												//FIXME: handle the intent set to this sub menu item
-												activity.startActivity(selectedSubMenuItem.getIntent());
+												if(selectedSubMenuItem.getIntent() != null)
+													activity.startActivity(selectedSubMenuItem.getIntent());
 											}
 										}
 										else{
@@ -144,7 +147,8 @@ public class InputAccess {
 								subMenuDialog.show();
 							}
 							//FIXME: handle the intent set to menu item here
-							activity.startActivity(selectedItem.getIntent());
+							if(selectedItem.getIntent() != null)
+								activity.startActivity(selectedItem.getIntent());
 						}
 					}
 				}
@@ -152,6 +156,7 @@ public class InputAccess {
 			menuDialog.getDialog().setOnDismissListener(new OnDismissListener() {
 
 				public void onDismiss(DialogInterface dialog) {
+					Log.d("InputAccess","in dismiss");
 					activity.getWindow().getCallback().onPanelClosed(Window.FEATURE_OPTIONS_PANEL, menuDialog.getMenu());
 				}
 			});
@@ -211,7 +216,8 @@ public class InputAccess {
 			}
 
 			public boolean onPreparePanel(int featureId, View view, Menu menu) {
-				boolean b = cb.onPreparePanel(featureId, view, mMenu);
+				Log.d("InputAccess", "1");
+				boolean b = cb.onPreparePanel(featureId, view, (featureId == Window.FEATURE_OPTIONS_PANEL)?mMenu:menu);
 				if(b && featureId == Window.FEATURE_OPTIONS_PANEL){
 					return onPrepareOptionsMenu(mMenu, isDefaultMenu);
 				}
@@ -219,14 +225,23 @@ public class InputAccess {
 			}
 
 			public void onPanelClosed(int featureId, Menu menu) {
-				cb.onPanelClosed(featureId, mMenu);
+				Log.d("InputAccess", "2");
+				if(featureId == Window.FEATURE_OPTIONS_PANEL)
+					cb.onPanelClosed(featureId, mMenu);
+				else
+					cb.onPanelClosed(featureId, menu);
 			}
 
 			public boolean onMenuOpened(int featureId, Menu menu) {
-				return cb.onMenuOpened(featureId, mMenu);
+				Log.d("InputAccess", "3");
+				if(featureId == Window.FEATURE_OPTIONS_PANEL)
+					return cb.onMenuOpened(featureId, mMenu);
+				else
+					return cb.onMenuOpened(featureId, menu);
 			}
 
 			public boolean onMenuItemSelected(int featureId, MenuItem item) {
+				Log.d("InputAccess", "4");
 				return cb.onMenuItemSelected(featureId, item);
 			}
 
@@ -235,12 +250,19 @@ public class InputAccess {
 			}
 
 			public View onCreatePanelView(int featureId) {
+				Log.d("InputAccess", "5");
 				return cb.onCreatePanelView(featureId);
 			}
 
 			public boolean onCreatePanelMenu(int featureId, Menu menu) {
-				mMenu.setMenu(menu);
-				return cb.onCreatePanelMenu(featureId, mMenu);
+				Log.d("InputAccess", "6");
+				if(featureId == Window.FEATURE_OPTIONS_PANEL){
+					mMenu.setMenu(menu);
+					return cb.onCreatePanelMenu(featureId, mMenu);
+				}
+				else{ 
+					return cb.onCreatePanelMenu(featureId, menu);
+				}
 			}
 
 			public void onContentChanged() {
