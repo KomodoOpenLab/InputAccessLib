@@ -156,6 +156,13 @@ public class SubMenu implements android.view.SubMenu{
 		subMenu.setGroupCheckable(group, checkable, exclusive);
 	}
 
+	/**
+	 * Checks whether menu item is a part of exclusive group.
+	 * @param item is the menu item whose exclusive state has to be checked
+	 * @return true if the menu item is part of an exclusive group which was set to checkable using
+	 * setGroupCheckable() and false if the menu items is part of a group which need not be exclusive
+	 * and multiple items can have their checked state set to true.
+	 */
 	public boolean isExclusiveItem(MenuItem item){
 		int groupId = item.getGroupId();
 		Boolean exclusive = exclusiveItemMap.get(groupId);
