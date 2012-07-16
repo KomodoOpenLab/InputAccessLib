@@ -15,6 +15,7 @@ public class Menu implements android.view.Menu{
 	public Menu(android.view.Menu menu){
 		this.menu = menu;
 		menuItemMap = new HashMap<android.view.MenuItem, ca.idi.tecla.lib.menu.MenuItem>();
+		refreshMap();
 	}
 
 	public Menu() {
@@ -32,54 +33,39 @@ public class Menu implements android.view.Menu{
 		else{
 			menuItemMap = new HashMap<android.view.MenuItem, ca.idi.tecla.lib.menu.MenuItem>();
 		}
+		refreshMap();
 	}
 
 	public ca.idi.tecla.lib.menu.MenuItem add(CharSequence title) {
-		//store the created MenuItem in a HashMap with its custom MenuItem counterpart
-		//and return the custom MenuItem
-		android.view.MenuItem item = menu.add(title);
-		ca.idi.tecla.lib.menu.MenuItem menuItem = new ca.idi.tecla.lib.menu.MenuItem(item);
-		menuItemMap.put(item, menuItem);
-		return menuItem;
+		return addMenuItemToMap(menu.add(title));
 	}
 
 	public ca.idi.tecla.lib.menu.MenuItem add(int titleRes) {
-		android.view.MenuItem item = menu.add(titleRes);
-		ca.idi.tecla.lib.menu.MenuItem menuItem = new ca.idi.tecla.lib.menu.MenuItem(item);
-		menuItemMap.put(item, menuItem);
-		return menuItem;
+		return addMenuItemToMap(menu.add(titleRes));
 	}
 
 	public ca.idi.tecla.lib.menu.MenuItem add(int groupId, int itemId, int order, CharSequence title) {
-		android.view.MenuItem item = menu.add(groupId,itemId,order,title);
-		ca.idi.tecla.lib.menu.MenuItem menuItem = new ca.idi.tecla.lib.menu.MenuItem(item);
-		menuItemMap.put(item, menuItem);
-		return menuItem;
+		return addMenuItemToMap(menu.add(groupId,itemId,order,title));
 	}
 
 	public ca.idi.tecla.lib.menu.MenuItem add(int groupId, int itemId, int order, int titleRes) {
-		android.view.MenuItem item = menu.add(groupId,itemId,order,titleRes);
-		ca.idi.tecla.lib.menu.MenuItem menuItem = new ca.idi.tecla.lib.menu.MenuItem(item);
-		menuItemMap.put(item, menuItem);
-		return menuItem;
+		return addMenuItemToMap(menu.add(groupId,itemId,order,titleRes));
 	}
 
 	public int addIntentOptions(int groupId, int itemId, int order,
 			ComponentName caller, Intent[] specifics, Intent intent, int flags,
 			MenuItem[] outSpecificItems) {
-		return menu.addIntentOptions(groupId, itemId, order, caller, specifics, intent, flags, outSpecificItems);
+		int N = menu.addIntentOptions(groupId, itemId, order, caller, specifics, intent, flags, outSpecificItems);
+		refreshMap();
+		return N;
 	}
 
 	public ca.idi.tecla.lib.menu.SubMenu addSubMenu(CharSequence title) {
-		//store the menu item created in a Hash map with its custom counterpart
 		SubMenu subMenu = menu.addSubMenu(title);
-		//creating custom subMenu
+		//custom subMenu
 		ca.idi.tecla.lib.menu.SubMenu mSubMenu = new ca.idi.tecla.lib.menu.SubMenu(subMenu);
-
-		MenuItem item = subMenu.getItem();
-		ca.idi.tecla.lib.menu.MenuItem mItem = new ca.idi.tecla.lib.menu.MenuItem(item);
-		menuItemMap.put(item, mItem);
-
+		//custom MenuItem
+		ca.idi.tecla.lib.menu.MenuItem mItem = addMenuItemToMap(subMenu.getItem());
 		mItem.setSubMenu(mSubMenu);
 		mSubMenu.setMenuItem(mItem);
 		return mSubMenu;
@@ -87,12 +73,10 @@ public class Menu implements android.view.Menu{
 
 	public ca.idi.tecla.lib.menu.SubMenu addSubMenu(int titleRes) {
 		SubMenu subMenu = menu.addSubMenu(titleRes);
+		//custom subMenu
 		ca.idi.tecla.lib.menu.SubMenu mSubMenu = new ca.idi.tecla.lib.menu.SubMenu(subMenu);
-
-		MenuItem item = subMenu.getItem();
-		ca.idi.tecla.lib.menu.MenuItem mItem = new ca.idi.tecla.lib.menu.MenuItem(item);
-		menuItemMap.put(item, mItem);
-
+		//custom MenuItem
+		ca.idi.tecla.lib.menu.MenuItem mItem = addMenuItemToMap(subMenu.getItem());
 		mItem.setSubMenu(mSubMenu);
 		mSubMenu.setMenuItem(mItem);
 		return mSubMenu;
@@ -101,12 +85,10 @@ public class Menu implements android.view.Menu{
 	public ca.idi.tecla.lib.menu.SubMenu addSubMenu(int groupId, int itemId, int order,
 			CharSequence title) {
 		SubMenu subMenu = menu.addSubMenu(groupId, itemId, order, title);
+		//custom subMenu
 		ca.idi.tecla.lib.menu.SubMenu mSubMenu = new ca.idi.tecla.lib.menu.SubMenu(subMenu);
-
-		MenuItem item = subMenu.getItem();
-		ca.idi.tecla.lib.menu.MenuItem mItem = new ca.idi.tecla.lib.menu.MenuItem(item);
-		menuItemMap.put(item, mItem);
-
+		//custom MenuItem
+		ca.idi.tecla.lib.menu.MenuItem mItem = addMenuItemToMap(subMenu.getItem());
 		mItem.setSubMenu(mSubMenu);
 		mSubMenu.setMenuItem(mItem);
 		return mSubMenu;
@@ -114,12 +96,10 @@ public class Menu implements android.view.Menu{
 
 	public ca.idi.tecla.lib.menu.SubMenu addSubMenu(int groupId, int itemId, int order, int titleRes) {
 		SubMenu subMenu = menu.addSubMenu(groupId, itemId, order, titleRes);
+		//custom subMenu
 		ca.idi.tecla.lib.menu.SubMenu mSubMenu = new ca.idi.tecla.lib.menu.SubMenu(subMenu);
-
-		MenuItem item = subMenu.getItem();
-		ca.idi.tecla.lib.menu.MenuItem mItem = new ca.idi.tecla.lib.menu.MenuItem(item);
-		menuItemMap.put(item, mItem);
-
+		//custom MenuItem
+		ca.idi.tecla.lib.menu.MenuItem mItem = addMenuItemToMap(subMenu.getItem());
 		mItem.setSubMenu(mSubMenu);
 		mSubMenu.setMenuItem(mItem);
 		return mSubMenu;
@@ -164,10 +144,12 @@ public class Menu implements android.view.Menu{
 
 	public void removeGroup(int groupId) {
 		menu.removeGroup(groupId);
+		refreshMap();
 	}
 
 	public void removeItem(int id) {
 		menu.removeItem(id);
+		refreshMap();
 	}
 
 	public void setGroupCheckable(int group, boolean checkable,
@@ -191,4 +173,24 @@ public class Menu implements android.view.Menu{
 		return menu.size();
 	}
 
+	/**
+	 * Refreshes the menu item hash map with the menu items currently in the menu
+	 */
+	private void refreshMap(){
+		menuItemMap.clear();
+		for(int i=0;i<menu.size();i++){
+			addMenuItemToMap(menu.getItem(i));
+		}
+	}
+	
+	/**
+	 *Stores the menuItem in a HashMap with its custom MenuItem counterpart and returns the custom MenuItem
+	 * @param menuItem is the MenuItem to be stored in the hash map
+	 * @return the menuItem's custom counterpart
+	 */
+	private ca.idi.tecla.lib.menu.MenuItem addMenuItemToMap(android.view.MenuItem menuItem){
+		ca.idi.tecla.lib.menu.MenuItem mItem = new ca.idi.tecla.lib.menu.MenuItem(menuItem);
+		menuItemMap.put(menuItem, mItem);
+		return mItem;
+	}
 }

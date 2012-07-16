@@ -39,6 +39,7 @@ public class SubMenu implements android.view.SubMenu{
 		this.subMenu = subMenu;
 		menuItemMap = new HashMap<android.view.MenuItem, ca.idi.tecla.lib.menu.MenuItem>();
 		exclusiveItemMap = new HashMap<Integer, Boolean>();
+		refreshMap();
 	}
 
 	/**
@@ -52,37 +53,27 @@ public class SubMenu implements android.view.SubMenu{
 	}
 
 	public ca.idi.tecla.lib.menu.MenuItem add(CharSequence title) {
-		MenuItem item = subMenu.add(title);
-		ca.idi.tecla.lib.menu.MenuItem mItem = new ca.idi.tecla.lib.menu.MenuItem(item);
-		menuItemMap.put(item, mItem);
-		return mItem;
+		return addMenuItemToMap(subMenu.add(title));
 	}
 
 	public ca.idi.tecla.lib.menu.MenuItem add(int titleRes) {
-		MenuItem item = subMenu.add(titleRes);
-		ca.idi.tecla.lib.menu.MenuItem mItem = new ca.idi.tecla.lib.menu.MenuItem(item);
-		menuItemMap.put(item, mItem);
-		return mItem;
+		return addMenuItemToMap(subMenu.add(titleRes));
 	}
 
 	public MenuItem add(int groupId, int itemId, int order, CharSequence title) {
-		MenuItem item = subMenu.add(groupId, itemId, order, title);
-		ca.idi.tecla.lib.menu.MenuItem mItem = new ca.idi.tecla.lib.menu.MenuItem(item);
-		menuItemMap.put(item, mItem);
-		return mItem;
+		return addMenuItemToMap(subMenu.add(groupId, itemId, order, title));
 	}
 
 	public MenuItem add(int groupId, int itemId, int order, int titleRes) {
-		MenuItem item = subMenu.add(groupId, itemId, order, titleRes);
-		ca.idi.tecla.lib.menu.MenuItem mItem = new ca.idi.tecla.lib.menu.MenuItem(item);
-		menuItemMap.put(item, mItem);
-		return mItem;
+		return addMenuItemToMap(subMenu.add(groupId, itemId, order, titleRes));
 	}
 
 	public int addIntentOptions(int groupId, int itemId, int order,
 			ComponentName caller, Intent[] specifics, Intent intent, int flags,
 			MenuItem[] outSpecificItems) {
-		return subMenu.addIntentOptions(groupId, itemId, order, caller, specifics, intent, flags, outSpecificItems);
+		int N = subMenu.addIntentOptions(groupId, itemId, order, caller, specifics, intent, flags, outSpecificItems);
+		refreshMap();
+		return N;
 	}
 
 	public ca.idi.tecla.lib.menu.SubMenu addSubMenu(CharSequence title) {
@@ -144,10 +135,12 @@ public class SubMenu implements android.view.SubMenu{
 	public void removeGroup(int groupId) {
 		exclusiveItemMap.remove(groupId);
 		subMenu.removeGroup(groupId);
+		refreshMap();
 	}
 
 	public void removeItem(int id) {
 		subMenu.removeItem(id);
+		refreshMap();
 	}
 
 	public void setGroupCheckable(int group, boolean checkable,
@@ -274,4 +267,24 @@ public class SubMenu implements android.view.SubMenu{
 		}
 	}
 
+	/**
+	 * Refreshes the menu item hash map with the menu items currently in the menu
+	 */
+	private void refreshMap(){
+		menuItemMap.clear();
+		for(int i=0;i<subMenu.size();i++){
+			addMenuItemToMap(subMenu.getItem(i));
+		}
+	}
+	
+	/**
+	 *Stores the menuItem in a HashMap with its custom MenuItem counterpart and returns the custom MenuItem
+	 * @param menuItem is the MenuItem to be stored in the hash map
+	 * @return the menuItem's custom counterpart
+	 */
+	private ca.idi.tecla.lib.menu.MenuItem addMenuItemToMap(android.view.MenuItem menuItem){
+		ca.idi.tecla.lib.menu.MenuItem mItem = new ca.idi.tecla.lib.menu.MenuItem(menuItem);
+		menuItemMap.put(menuItem, mItem);
+		return mItem;
+	}
 }

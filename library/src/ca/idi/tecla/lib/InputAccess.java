@@ -105,7 +105,7 @@ public class InputAccess {
 	}
 
 	/**
-	 * It displays the options menu and returns a boolean value.
+	 * It creates an an accessible options menu from the standard options menu and returns a boolean value.
 	 * @param menu the options menu to be displayed
 	 * @param useAccessibleMenu is used to decide that in case TeclaIME is not selected as the current input method
 	 * should the accessible options menu be displayed(if set to true) or the default inaccessible options menu should 
