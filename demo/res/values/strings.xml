@@ -31,7 +31,10 @@
 		<item>Item 4</item>
 		<item>Item 5</item>
 	</string-array>
-    
+	<string name="sub_menu_title">Sub menu</string>
+	<string name="header_title">Title</string>
+	<string name="listener_invoked">OnMenuItemClickListener invoked</string>
+	
     <string name="list_preference_hello">Hello World, ListPreferenceActivity!</string>
     <string name="list_preference_activity_name">Accessible ListPreference</string>
 	<string name="list_preference_title">Configure device</string>
