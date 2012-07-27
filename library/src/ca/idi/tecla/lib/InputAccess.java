@@ -284,7 +284,7 @@ public class InputAccess {
 			}
 
 			public boolean dispatchPopulateAccessibilityEvent(AccessibilityEvent event) {
-				return dispatchPopulateAccessibilityEvent(event);
+				return cb.dispatchPopulateAccessibilityEvent(event);
 			}
 
 			public boolean dispatchKeyEvent(KeyEvent event) {
