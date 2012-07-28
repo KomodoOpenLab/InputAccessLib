@@ -1,7 +1,9 @@
 package ca.idi.tecla.lib.menu;
 
+import java.lang.reflect.Method;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.ActionProvider;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View;
@@ -11,7 +13,67 @@ public class MenuItem implements android.view.MenuItem{
 	private android.view.MenuItem menuItem;
 	private ca.idi.tecla.lib.menu.SubMenu subMenu;
 	private OnMenuItemClickListener mClickListener;
+	private static final String TAG = "ca.idi.tecla.lib.menu.MenuItem";
+	
+	private static Method collapseActionView;
+	private static Method expandActionView;
+	private static Method getActionProvider;
+	private static Method getActionView;
+	private static Method isActionViewExpanded;
+	private static Method setActionProvider;
+	private static Method setActionView;
+	private static Method setActionView_int;
+	private static Method setShowAsAction;
+	private static Method setShowAsActionFlags;
+	private static Method setOnActionExpandListener;
+	
+	static{
+		try {
+			collapseActionView = android.view.MenuItem.class.getMethod("collapseActionView");
+		} catch (Exception e) {}
 
+		try {
+			expandActionView = android.view.MenuItem.class.getMethod("expandActionView");
+		} catch (Exception e) {}
+		
+		try {
+			getActionProvider = android.view.MenuItem.class.getMethod("getActionProvider");
+		} catch (Exception e) {}
+		
+		try {
+			getActionView = android.view.MenuItem.class.getMethod("getActionView");
+		} catch (Exception e) {}
+		
+		try {
+			isActionViewExpanded = android.view.MenuItem.class.getMethod("isActionViewExpanded");
+		} catch (Exception e) {}
+		
+		try {
+			setActionProvider = android.view.MenuItem.class.getMethod("setActionProvider", ActionProvider.class);
+		} catch (Exception e) {}
+		
+		try {
+			setActionView = android.view.MenuItem.class.getMethod("setActionView", View.class);
+		} catch (Exception e) {}
+		
+		try {
+			setActionView_int = android.view.MenuItem.class.getMethod("setActionView", int.class);
+		} catch (Exception e) {}
+		
+		try {
+			setShowAsAction = android.view.MenuItem.class.getMethod("setShowAsAction", int.class);
+		} catch (Exception e) {}
+		
+		try {
+			setShowAsActionFlags = android.view.MenuItem.class.getMethod("setShowAsActionFlags", int.class);
+		} catch (Exception e) {}
+		
+		try {
+			setOnActionExpandListener = android.view.MenuItem.class.getMethod("setOnActionExpandListener", android.view.MenuItem.OnActionExpandListener.class);
+		} catch (Exception e) {}
+
+	}
+	
 	public MenuItem(android.view.MenuItem menuItem){
 		this.menuItem = menuItem;
 		subMenu = null;
@@ -26,19 +88,39 @@ public class MenuItem implements android.view.MenuItem{
 	}
 
 	public boolean collapseActionView() {
-		return menuItem.collapseActionView();
+		try {
+			return (Boolean) collapseActionView.invoke(menuItem);
+		} catch (Exception e) {
+			Log.e(TAG, e.getMessage());
+			return false;
+		}
 	}
 
 	public boolean expandActionView() {
-		return menuItem.expandActionView();
+		try {
+			return (Boolean) expandActionView.invoke(menuItem);
+		} catch (Exception e) {
+			Log.e(TAG, e.getMessage());
+			return false;
+		}
 	}
 
 	public ActionProvider getActionProvider() {
-		return menuItem.getActionProvider();
+		try {
+			return (ActionProvider) getActionProvider.invoke(menuItem);
+		} catch (Exception e) {
+			Log.e(TAG, e.getMessage());
+			return null;
+		}
 	}
 
 	public View getActionView() {
-		return menuItem.getActionView();
+		try {
+			return (View) getActionView.invoke(menuItem);
+		} catch (Exception e) {
+			Log.e(TAG, e.getMessage());
+			return null;
+		}
 	}
 
 	public char getAlphabeticShortcut() {
@@ -90,7 +172,12 @@ public class MenuItem implements android.view.MenuItem{
 	}
 
 	public boolean isActionViewExpanded() {
-		return menuItem.isActionViewExpanded();
+		try {
+			return (Boolean) isActionViewExpanded.invoke(menuItem);
+		} catch (Exception e) {
+			Log.e(TAG, e.getMessage());
+			return false;
+		}
 	}
 
 	public boolean isCheckable() {
@@ -110,17 +197,29 @@ public class MenuItem implements android.view.MenuItem{
 	}
 
 	public ca.idi.tecla.lib.menu.MenuItem setActionProvider(ActionProvider actionProvider) {
-		menuItem.setActionProvider(actionProvider);
+		try {
+			setActionProvider.invoke(menuItem, actionProvider);
+		} catch (Exception e) {
+			Log.e(TAG, e.getMessage());
+		}
 		return this;
 	}
 
 	public ca.idi.tecla.lib.menu.MenuItem setActionView(View view) {
-		menuItem.setActionView(view);
+		try {
+			setActionView.invoke(menuItem, view);
+		} catch (Exception e) {
+			Log.e(TAG, e.getMessage());
+		}
 		return this;
 	}
 
 	public ca.idi.tecla.lib.menu.MenuItem setActionView(int resId) {
-		menuItem.setActionView(resId);
+		try {
+			setActionView_int.invoke(menuItem, resId);
+		} catch (Exception e) {
+			Log.e(TAG, e.getMessage());
+		}
 		return this;
 	}
 
@@ -166,7 +265,11 @@ public class MenuItem implements android.view.MenuItem{
 
 	public ca.idi.tecla.lib.menu.MenuItem setOnActionExpandListener(
 			OnActionExpandListener listener) {
-		menuItem.setOnActionExpandListener(listener);
+		try {
+			setOnActionExpandListener.invoke(menuItem, listener);
+		} catch (Exception e) {
+			Log.e(TAG, e.getMessage());
+		}
 		return this;
 	}
 
@@ -183,11 +286,19 @@ public class MenuItem implements android.view.MenuItem{
 	}
 
 	public void setShowAsAction(int actionEnum) {
-		menuItem.setShowAsAction(actionEnum);
+		try {
+			setShowAsAction.invoke(menuItem, actionEnum);
+		} catch (Exception e) {
+			Log.e(TAG, e.getMessage());
+		}
 	}
 
 	public ca.idi.tecla.lib.menu.MenuItem setShowAsActionFlags(int actionEnum) {
-		menuItem.setShowAsAction(actionEnum);
+		try {
+			setShowAsActionFlags.invoke(menuItem, actionEnum);
+		} catch (Exception e) {
+			Log.e(TAG, e.getMessage());
+		}
 		return this;
 	}
 
