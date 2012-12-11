@@ -7,14 +7,14 @@
 		android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
 	    android:orientation="horizontal" 
-	    android:padding="5px" >
+	    android:padding="5dp" >
 	    <ImageView
 	        android:id="@+id/accessible_menu_item_icon"
-			android:layout_width="50px"
-			android:layout_height="50px"
-			android:layout_marginLeft="5px"
-			android:layout_marginTop="5px"
-			android:layout_marginRight="20px"
+			android:layout_width="50dp"
+			android:layout_height="50dp"
+			android:layout_marginLeft="5dp"
+			android:layout_marginTop="5dp"
+			android:layout_marginRight="20dp"
 			android:layout_gravity="center_vertical" />
 	    <TextView 
 	        android:id="@+id/accessible_menu_item_label"
