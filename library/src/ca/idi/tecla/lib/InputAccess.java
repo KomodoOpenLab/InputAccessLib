@@ -1,6 +1,8 @@
 package ca.idi.tecla.lib;
 
 import java.lang.reflect.Method;
+
+import ca.idi.tecla.lib.menu.MenuDialog;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -24,13 +26,19 @@ public class InputAccess {
 
 	//The activity whose options menu has to made accessible
 	private Activity activity;
+
 	//The accessible version of the options menu associated with the activity
 	private MenuDialog menuDialog = null;
+	private MenuDialog subMenuDialog = null;
+
+	//whether method Activity.onMenuOpened() should be called
+	private boolean callOnMenuOpened;
+
 	//whether accessilbe options menu should be used even when Tecla Access keyboard is not
 	//the currently selected keyboard
 	private boolean isDefaultMenu;
-	private static final String TECLA_IME_ID = "ca.idi.tekla/.ime.TeclaIME";
 
+	private static final String TECLA_IME_ID = "ca.idi.tekla/.ime.TeclaIME";
 	private static Method dispatchGenericMotionEvent;
 	private static Method dispatchKeyShortcutEvent;
 	private static Method onActionModeFinished;
@@ -38,42 +46,42 @@ public class InputAccess {
 	private static Method onWindowStartingActionMode;
 
 	static{
-		 try {
-             Class<?> partypes[] = new Class[1];
-             partypes[0] = MotionEvent.class;
-             dispatchGenericMotionEvent = Callback.class.getMethod("dispatchGenericMotionEvent", partypes);
-		 } catch (NoSuchMethodException e) {
-		 }
+		try {
+			Class<?> partypes[] = new Class[1];
+			partypes[0] = MotionEvent.class;
+			dispatchGenericMotionEvent = Callback.class.getMethod("dispatchGenericMotionEvent", partypes);
+		} catch (NoSuchMethodException e) {
+		}
 
-		 try {
-             Class<?> partypes[] = new Class[1];
-             partypes[0] = KeyEvent.class;
-             dispatchKeyShortcutEvent = Callback.class.getMethod("dispatchKeyShortcutEvent", partypes);
-		 } catch (NoSuchMethodException e) {
-		 }
+		try {
+			Class<?> partypes[] = new Class[1];
+			partypes[0] = KeyEvent.class;
+			dispatchKeyShortcutEvent = Callback.class.getMethod("dispatchKeyShortcutEvent", partypes);
+		} catch (NoSuchMethodException e) {
+		}
 
-		 try {
-             Class<?> partypes[] = new Class[1];
-             partypes[0] = ActionMode.class;
-             onActionModeFinished = Callback.class.getMethod("onActionModeFinished", partypes);
-		 } catch (NoSuchMethodException e) {
-		 }
+		try {
+			Class<?> partypes[] = new Class[1];
+			partypes[0] = ActionMode.class;
+			onActionModeFinished = Callback.class.getMethod("onActionModeFinished", partypes);
+		} catch (NoSuchMethodException e) {
+		}
 
-		 try {
-             Class<?> partypes[] = new Class[1];
-             partypes[0] = ActionMode.class;
-             onActionModeStarted = Callback.class.getMethod("onActionModeStarted", partypes);
-		 } catch (NoSuchMethodException e) {
-		 }
+		try {
+			Class<?> partypes[] = new Class[1];
+			partypes[0] = ActionMode.class;
+			onActionModeStarted = Callback.class.getMethod("onActionModeStarted", partypes);
+		} catch (NoSuchMethodException e) {
+		}
 
-		 try {
-             Class<?> partypes[] = new Class[1];
-             partypes[0] = android.view.ActionMode.Callback.class;
-             onWindowStartingActionMode = Callback.class.getMethod("onWindowStartingActionMode", partypes);
-		 } catch (NoSuchMethodException e) {
-		 }
+		try {
+			Class<?> partypes[] = new Class[1];
+			partypes[0] = android.view.ActionMode.Callback.class;
+			onWindowStartingActionMode = Callback.class.getMethod("onWindowStartingActionMode", partypes);
+		} catch (NoSuchMethodException e) {
+		}
 
-}
+	}
 
 	/**
 	 * Create an object only if you wish to implement the accessible version of the options menu.
@@ -95,9 +103,9 @@ public class InputAccess {
 		this.activity = activity;
 		this.isDefaultMenu = isDefaultMenu;
 	}
-	
+
 	/**
-	 * It displays the options menu and returns a boolean value.
+	 * It creates an an accessible options menu from the standard options menu and returns a boolean value.
 	 * @param menu the options menu to be displayed
 	 * @param useAccessibleMenu is used to decide that in case TeclaIME is not selected as the current input method
 	 * should the accessible options menu be displayed(if set to true) or the default inaccessible options menu should 
@@ -105,24 +113,51 @@ public class InputAccess {
 	 * @return false if the accessible version of the menu has been displayed after calling this method and true if
 	 * the default inaccessible version of the options menu has been displayed after calling this method.
 	 */
-	private boolean onPrepareOptionsMenu(Menu menu, boolean useAccessibleMenu){
-		if((menuDialog == null || !menuDialog.isShowing()) && (isTeclaIMESelected() || useAccessibleMenu)){
+	private boolean onPrepareOptionsMenu(ca.idi.tecla.lib.menu.Menu menu, boolean useAccessibleMenu){
+		if((menuDialog == null || !menuDialog.getDialog().isShowing()) && (isTeclaIMESelected() || useAccessibleMenu)){
 			menuDialog = new MenuDialog(this.activity, menu);
-			menuDialog.setOnCancelListener(new OnCancelListener() {
+			menuDialog.getDialog().setOnCancelListener(new OnCancelListener() {
 
 				public void onCancel(DialogInterface dialog) {
-					if(menuDialog.getSelectedMenuItem() != null)
-						activity.getWindow().getCallback().onMenuItemSelected(Window.FEATURE_OPTIONS_PANEL, menuDialog.getSelectedMenuItem());
+					ca.idi.tecla.lib.menu.MenuItem selectedItem = (ca.idi.tecla.lib.menu.MenuItem)menuDialog.getSelectedMenuItem();
+					//call the listener attached to the selected menu item
+					if(selectedItem != null && !selectedItem.invokeOnMenuItemClickListener()){
+						//call the onOptionsItemSelected() method of the activity
+						if(!activity.getWindow().getCallback().onMenuItemSelected(Window.FEATURE_OPTIONS_PANEL, selectedItem)){
+							//check if a submenu is attached to this menu item
+							if(selectedItem.hasSubMenu()){
+								subMenuDialog = new MenuDialog(activity, selectedItem.getSubMenu());
+								subMenuDialog.getDialog().setCancelable(true);
+								subMenuDialog.getDialog().setOnCancelListener(new OnCancelListener() {
+
+									public void onCancel(DialogInterface dialog) {
+										ca.idi.tecla.lib.menu.MenuItem selectedSubMenuItem = (ca.idi.tecla.lib.menu.MenuItem) subMenuDialog.getSelectedMenuItem();
+										//call the listener attached to the selected sub menu item
+										if(selectedSubMenuItem != null && !selectedSubMenuItem.invokeOnMenuItemClickListener()){
+											//call the onOptionsItemSelected() method of the activity
+											if(!activity.getWindow().getCallback().onMenuItemSelected(Window.FEATURE_OPTIONS_PANEL, selectedSubMenuItem)){
+												if(selectedSubMenuItem.getIntent() != null)
+													activity.startActivity(selectedSubMenuItem.getIntent());
+											}
+										}
+									}
+								});
+								subMenuDialog.show();
+							}
+							if(selectedItem.getIntent() != null)
+								activity.startActivity(selectedItem.getIntent());
+						}
+					}
 				}
 			});
-			menuDialog.setOnDismissListener(new OnDismissListener() {
+			menuDialog.getDialog().setOnDismissListener(new OnDismissListener() {
 
 				public void onDismiss(DialogInterface dialog) {
-					activity.getWindow().getCallback().onPanelClosed(Window.FEATURE_OPTIONS_PANEL, menuDialog.getMenu());
+					//if sub menu opens up onPanelClosed should not be called
+					if(subMenuDialog == null || !subMenuDialog.getDialog().isShowing())
+						activity.getWindow().getCallback().onPanelClosed(Window.FEATURE_OPTIONS_PANEL, menuDialog.getMenu());
 				}
 			});
-			menuDialog.show();
-			InputAccess.showBelowIME(menuDialog);
 			return false;
 		}
 		return true;
@@ -134,8 +169,8 @@ public class InputAccess {
 	 */
 	public void closeOptionsMenu(){
 		activity.closeOptionsMenu();
-		if(menuDialog != null && menuDialog.isShowing()){
-			menuDialog.dismiss();
+		if(menuDialog != null && menuDialog.getDialog().isShowing()){
+			menuDialog.getDialog().dismiss();
 		}
 	}
 
@@ -157,6 +192,8 @@ public class InputAccess {
 
 		activity.getWindow().setCallback(new Callback() {
 
+			private final ca.idi.tecla.lib.menu.Menu mMenu = new ca.idi.tecla.lib.menu.Menu();
+
 			public void onWindowFocusChanged(boolean hasFocus) {
 				if(hasFocus){
 					activity.sendBroadcast(new Intent("ca.idi.tekla.ime.action.SHOW_IME_MENU_BUTTON"));
@@ -176,19 +213,36 @@ public class InputAccess {
 			}
 
 			public boolean onPreparePanel(int featureId, View view, Menu menu) {
-				boolean b = cb.onPreparePanel(featureId, view, menu);
+				boolean b = cb.onPreparePanel(featureId, view, (featureId == Window.FEATURE_OPTIONS_PANEL)?mMenu:menu);
 				if(b && featureId == Window.FEATURE_OPTIONS_PANEL){
-					return onPrepareOptionsMenu(menu, isDefaultMenu);
+					boolean showStandardMenu = onPrepareOptionsMenu(mMenu, isDefaultMenu);
+					if(showStandardMenu){
+						return true;
+					}
+					else if(!callOnMenuOpened ||(callOnMenuOpened && activity.getWindow().getCallback().onMenuOpened(Window.FEATURE_OPTIONS_PANEL, menu))){
+						if(menuDialog != null)
+							menuDialog.show();
+						return false;
+					}
+					return false;
 				}
 				return b;
 			}
 
 			public void onPanelClosed(int featureId, Menu menu) {
-				cb.onPanelClosed(featureId, menu);
+				if(featureId == Window.FEATURE_OPTIONS_PANEL)
+					cb.onPanelClosed(featureId, mMenu);
+				else
+					cb.onPanelClosed(featureId, menu);
 			}
 
 			public boolean onMenuOpened(int featureId, Menu menu) {
-				return cb.onMenuOpened(featureId, menu);
+				//since onMenuOpened has already been called
+				callOnMenuOpened = false;
+				if(featureId == Window.FEATURE_OPTIONS_PANEL)
+					return cb.onMenuOpened(featureId, mMenu);
+				else
+					return cb.onMenuOpened(featureId, menu);
 			}
 
 			public boolean onMenuItemSelected(int featureId, MenuItem item) {
@@ -204,7 +258,13 @@ public class InputAccess {
 			}
 
 			public boolean onCreatePanelMenu(int featureId, Menu menu) {
-				return cb.onCreatePanelMenu(featureId, menu);
+				if(featureId == Window.FEATURE_OPTIONS_PANEL){
+					mMenu.setMenu(menu);
+					return cb.onCreatePanelMenu(featureId, mMenu);
+				}
+				else{
+					return cb.onCreatePanelMenu(featureId, menu);
+				}
 			}
 
 			public void onContentChanged() {
@@ -224,11 +284,13 @@ public class InputAccess {
 			}
 
 			public boolean dispatchPopulateAccessibilityEvent(AccessibilityEvent event) {
-				return dispatchPopulateAccessibilityEvent(event);
+				return cb.dispatchPopulateAccessibilityEvent(event);
 			}
 
 			public boolean dispatchKeyEvent(KeyEvent event) {
-				return cb.dispatchKeyEvent(event);
+				boolean consumed = cb.dispatchKeyEvent(event);
+				callOnMenuOpened = true;
+				return consumed;
 			}
 
 			public boolean dispatchGenericMotionEvent(MotionEvent event) {
