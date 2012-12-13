@@ -4,3 +4,5 @@
 *lint.xml
 *proguard.cfg
 *~
+*.classpath
+*.project
